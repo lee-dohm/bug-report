@@ -4,6 +4,14 @@ Dumps relevant information into a nicely formatted Markdown file for reporting a
 
 ## Installation
 
+The package can be installed by using the Settings screen and searching for `bug-report`.
+
+It can also be installed from the command line with the command:
+
+```bash
+apm install bug-report
+```
+
 ## Use
 
 ## Configuration
