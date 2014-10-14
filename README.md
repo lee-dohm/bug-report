@@ -14,7 +14,17 @@ apm install bug-report
 
 ## Use
 
+`bug-report` opens a new Markdown file with important version information and fields for inputting repro steps to help make great Atom bug reports.
+
 ## Configuration
+
+### Commands
+
+* `bug-report:open` &mdash; Opens the bug report template with version information already included
+
+### Keybinding
+
+* `ctrl-shift-alt-b` &mdash; Executes `bug-report:open`
 
 ## Copyright
 

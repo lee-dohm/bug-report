@@ -8,4 +8,4 @@
 # For more detailed documentation see
 # https://atom.io/docs/latest/advanced/keymaps
 '.workspace':
-  'ctrl-alt-o': 'bug-report:toggle'
+  'ctrl-shift-alt-b': 'bug-report:open'
