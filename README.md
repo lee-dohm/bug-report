@@ -16,6 +16,29 @@ apm install bug-report
 
 `bug-report` opens a new Markdown file with important version information and fields for inputting repro steps to help make great Atom bug reports.
 
+Sample template:
+
+```markdown
+# Bug Report
+
+[Enter description here]
+
+**Atom Version:** 0.137.0-95ee29e
+**OS Version:** darwin 13.4.0
+
+## Repro Steps
+
+1. [First Step]
+2. [Second Step]
+3. [and so on...]
+
+**Expected:** [Enter expected behavior here]
+**Actual:** [Enter actual behavior here]
+
+![Screenshot or GIF movie](url)
+
+```
+
 ## Configuration
 
 ### Commands
