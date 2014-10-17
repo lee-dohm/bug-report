@@ -1,7 +1,7 @@
 {
   "name": "bug-report",
   "main": "./lib/bug-report",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Dumps relevant information into a nicely formatted Markdown file for reporting an Atom bug.",
   "activationEvents": [
     "bug-report:open"
