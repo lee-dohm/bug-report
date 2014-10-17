@@ -1,3 +1,4 @@
+exec = require('child_process').exec
 fs = require('fs')
 os = require('os')
 plist = require('plist')
@@ -48,6 +49,16 @@ class BugReport
   osMarketingVersion: ->
     switch os.platform()
       when 'darwin' then @macMarketingVersion()
+      when 'win32' then @winMarketingVersion()
       else "#{os.platform()} #{os.release()}"
+
+  # Private: Generates the marketing version text for Windows systems.
+  #
+  # Returns a {String} containing the version text.
+  winMarketingVersion: ->
+    text = null
+    exec 'ver', (error, stdout, stderr) ->
+      text = stdout
+    text
 
 module.exports = new BugReport()
