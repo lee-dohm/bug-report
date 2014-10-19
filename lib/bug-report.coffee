@@ -1,4 +1,4 @@
-exec = require('child_process').exec
+spawnSync = require('child_process').spawnSync
 fs = require('fs')
 os = require('os')
 plist = require('plist')
@@ -19,9 +19,10 @@ class BugReport
 
         [Enter description here]
 
-        **Atom Version:** #{atom.getVersion()}
-        **OS Version:** #{@osMarketingVersion()}
-
+        - **Atom Version:** #{atom.getVersion()    }
+        - **OS Version:**   #{@osMarketingVersion()}
+        - **Misc Versions** #{@extendedVersion()   }
+        
         ## Repro Steps
 
         1. [First Step]
@@ -56,9 +57,19 @@ class BugReport
   #
   # Returns a {String} containing the version text.
   winMarketingVersion: ->
-    text = null
-    exec 'ver', (error, stdout, stderr) ->
-      text = stdout
-    text
-
+    info = spawnSync('systeminfo').stdout.toString()
+    if (res = /OS.Name.\s+(.*)$/im.exec info) then res[1] else '-Unknown-'
+    
+  # Private: Generates the apm --version text on any platform
+  #
+  # Returns a {String} containing the extended version info.
+  extendedVersion: ->
+    cmd = atom.packages.resourcePath + 
+          '/apm/node_modules/atom-package-manager/bin/apm' + 
+           (if os.platform() is 'win32' then '.cmd' else '')
+    '\n  - ' + spawnSync(cmd,['--version']).stdout.toString()
+                                .replace(/\[\d\dm/g, '')
+                                .replace(/\n\s*$/, '')
+                                .replace(/\n/g, '\n  - ')
+    
 module.exports = new BugReport()
