@@ -8,7 +8,7 @@ PanelView = require('./panel-view')
 class BugReport
   configDefaults: 
     GithubLoginUserName: ''
-    GihubPassword: ''
+    GithubPassword: ''
     orPathToFileWithUserAndPwd: 'none, file format is user:password.'
   
   # Public: Activates the package.
@@ -18,7 +18,7 @@ class BugReport
 
   # Public: Opens the bug report.
   open: ->
-    atom.workspace.open().then (editor) =>
+    atom.workspace.open('Bug Report').then (editor) =>
       editor.setGrammar(atom.syntax.grammarForScopeName('source.gfm'))
       editor.setText """
         # Bug Report

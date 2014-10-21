@@ -1,7 +1,8 @@
 
 # lib/panel-view
-        
+
 {View}  = require 'atom'
+fs      = require 'fs'
 request = require 'request'
 
 module.exports =
@@ -34,10 +35,11 @@ class PanelView extends View
         @div class:'label-msg', 'Posting, please wait ...'
         
       @div outlet:'postPost', class:'post-post', =>
-        @div class:'label-repo', 'This has been posted to GitHub repo '
-        @a   class:'link-repo'
-        @div class:'label-issue', ' as issue '
-        @a   class:'link-issue'
+        @span class:'label-link', 'This has been posted to the GitHub repository '
+        @a   outlet:'linkRepo', class:'link-repo'
+        @span class:'label-link', ' as '
+        @a   outlet:'linkIssue', class:' link-issue '
+        @span class:'label-period', '.'
         @input
           outlet: 'closeBtn'
           class:  'close-btn btn'
@@ -45,8 +47,6 @@ class PanelView extends View
           value:  'Close Bug Report'
 
   initialize: (@editor) ->
-    @titleInput.focus()
-    
     @subscribe @titleInput, 'keydown', (e) =>
       switch e.which
         when  9 then @repoInput.focus() # tab
@@ -63,12 +63,13 @@ class PanelView extends View
         else return
       false
       
-    @subscribe @closeBtn, 'click', => @post()
+    @subscribe @postBtn,  'click', => @post()
+    @subscribe @closeBtn, 'click', => 
+      @editor.destroy()
+      @destroy()
       
     disposable = atom.workspace.onDidChangeActivePaneItem (activeItem) =>
-      console.log 'onDidChangeActivePaneItem', activeItem,
-                  (activeItem is @editor), (activeItem is @)
-      if activeItem in [@editor, @] then @show()
+      if activeItem in [@editor, @] then @css display:'inline-block'
       else @hide()
     
     @disposables ?= []
@@ -76,13 +77,48 @@ class PanelView extends View
 
     atom.workspaceView.prependToBottom @
     
-  getLogin: -> loginUser: 'mark-hahn', loginPwd: 'HJKuiobnm987'
+  userPwdErr: ->
+    atom.confirm
+      message: 'Bug-Report Error:\n'
+      detailedMessage: 'Your GitHub username and password must be ' +
+                       'set in the bug-report package settings. '   +
+                       'These are missing or invalid.\n\n' +
+                       'Instructions: ' +
+                       'Open Atom settings (ctrl-,), enter bug-report ' +
+                       'in the package search field, and click on bug-report. ' +
+                       'The GitHub login settings fields User and Password will ' +
+                       'appear on the right. ' +
+                       'Fill in these fields or alternatively, ' +
+                       'enter a path to a text file containing USER:PASSWORD.'
+      buttons: ['OK']
+      
+  trim: (str) -> str.replace(/^\s*|\s*$/g, '')
+  
+  getLogin: -> 
+    user = atom.config.get('bug-report.GithubLoginUserName')
+    pwd  = atom.config.get('bug-report.GithubPassword')
+    path = atom.config.get('bug-report.orPathToFileWithUserAndPwd')
+    user = @trim user
+    pwd  = @trim pwd
+    if not user or not pwd
+      try
+        userPwd = fs.readFileSync(path, 'utf8')
+        [user, pwd] = userPwd.split(':')
+        user = @trim user
+        pwd  = @trim pwd
+        if not user or not pwd
+          @userPwdErr()
+          return {}
+      catch e
+        @userPwdErr()
+        return{}
+    loginUser: user, loginPwd: pwd
     
   post: -> 
-    title = @titleInput.val().replace(/^\s*|\s*$/g, '')
+    title = @trim @titleInput.val()
     if not title
       atom.confirm
-        message: '-- Bug-Report Error: --\n'
+        message: 'Bug-Report Error:\n'
         detailedMessage: 'The title field is empty.'
         buttons: ['OK']
       return
@@ -91,7 +127,7 @@ class PanelView extends View
     userSlashRepo or= 'mark-hahn/brtest'
     if not (userRepo = /^([^\/]+)\/([^\/]+)$/.exec userSlashRepo)
       atom.confirm
-        message: '-- Bug-Report Error: --\n'
+        message: 'Bug-Report Error:\n'
         detailedMessage: 'The GitHub Repo field should be of the form ' +
                          '"USER/REPO" where USER is the GitHub user and ' +
                          'REPO is the name of the repository.  This can ' +
@@ -99,49 +135,49 @@ class PanelView extends View
         buttons: ['OK']
       return
     
-    @prePost.hide()
-    @postMsg.show()
-    
     {loginUser, loginPwd} = @getLogin()
-    user = userRepo[1]
-    repo = userRepo[2].replace(/\.git$/i, '')
-    url  = "https://api.github.com/repos/#{user}/#{repo}/issues"
-    options = 
-      url: url
-      method: 'POST'
-      headers:
-        "User-Agent": "mark-hahn"
-        Authorization: 'Basic ' +
-          new Buffer(loginUser + ':' + loginPwd).toString('base64')
-      json: true
-      body:
-        title: title
-        body:  @editor.getText()
-        
-    request options, (err, res, body) =>
-      if err or body?.message or res?.statusCode isnt 201
-        console.log 'bug-report post error:',  {options, err, res, body}
-        atom.confirm
-          message: '-- Bug-Report Error: --\n'
-          detailedMessage: 'Error posting to GitHub repo ' + url + '\n\n' +
-                              (err?.message       ? '') + '  ' + 
-                              (body?.message      ? '') + '  ' +
-                              (res?.statusCode    ? '') + '  ' + 
-                              (res?.statusMessage ? '') + '  ' + 
-                              (res?.body          ? '')
-          buttons: ['OK']
-        @prePost.show()
+    if loginUser
+      @prePost.hide()
+      @postMsg.css display:'inline-block'
+      user = userRepo[1]
+      repo = userRepo[2].replace(/\.git$/i, '')
+      url  = "https://api.github.com/repos/#{user}/#{repo}/issues"
+      options = 
+        url: url
+        method: 'POST'
+        headers:
+          "User-Agent": "mark-hahn"
+          Authorization: 'Basic ' +
+            new Buffer(loginUser + ':' + loginPwd).toString('base64')
+        json: true
+        body:
+          title: title
+          body:  @editor.getText()
+          
+      request options, (err, res, body) =>
+        if err or body?.message or res?.statusCode isnt 201
+          console.log 'bug-report post error:',  {options, err, res, body}
+          atom.confirm
+            message: 'Bug-Report Error:\n'
+            detailedMessage: 'Error posting to GitHub repo ' + url + '\n\n' +
+                                (err?.message       ? '') + '  ' + 
+                                (body?.message      ? '') + '  ' +
+                                (res?.statusCode    ? '') + '  ' + 
+                                (res?.statusMessage ? '') + '  ' + 
+                                (res?.body          ? '')
+            buttons: ['OK']
+          @prePost.css display:'inline-block'
+          @postMsg.hide()
+          @postPost.hide()
+          return
+          
         @postMsg.hide()
-        @postPost.hide()
-        return
+        @linkRepo.attr href:"https://github.com/#{user}/#{repo}"
+        @linkRepo.text "#{user}/#{repo}"
+        @linkIssue.attr href:body.html_url
+        @linkIssue.text 'issue #' + body.number
         
-      else console.log 'post success',  {options, err, res, body}
-        
-      @postMsg.hide()
-      
-      # fill post post links from res
-      
-      @postPost.show()
+        @postPost.css display:'inline-block'
 
   destroy: ->
     for disposable in @disposables then disposable.dispose()

@@ -6,7 +6,7 @@
 .workspace .bug-report-panel {
     position:   relative; 
     width:      100%;
-    padding-top: 4px;
+    padding-top: 8px;
     font-size: 14px;
     background-image: 
       -webkit-linear-gradient(top, 
@@ -20,7 +20,8 @@
   
   .pre-post, .post-msg, .post-post {
     display: inline-block;
-    height: 100%;
+    min-height: 28px;
+    margin-left: 20px;
   }
   
   .pre-post {
@@ -28,11 +29,11 @@
     .horiz-div  { display: inline-block; }
     .inp-label { 
       display: inline-block;
-      margin:  0 6px 0 20px; 
+      margin-right: 6px; 
     }
     
     input {
-      height:         24px;
+      height:         21px;
       padding-left:    8px;
       padding-right:   2px;
       box-shadow:     none;
@@ -40,6 +41,7 @@
       border: 1px solid @input-border-color;
       color:            @text-color;
       background-color: @input-background-color;
+      margin-right: 20px;
     }
     .title-input { width: 300px; }
     .repo-input  { width: 200px; }
@@ -49,17 +51,26 @@
       top:          -2px; 
       font-size:    14px;
       line-height:     0;
-      margin-left:  10px;
-      height:       24px;
+      height:       23px;
+      padding-right: 5px;
     }
   }
   
   .post-msg {
     display: none;
+    width: 300px;
   }
     
   .post-post {
     display: none;
+    a {
+      color: @text-color-highlight !important;
+      text-decoration: underline;
+    }
+    .close-btn {
+      margin-left: 20px;
+      height:      24px;
+    }
   }
 }
 
