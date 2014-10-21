@@ -24,7 +24,7 @@ class PanelView extends View
           @input 
             outlet: 'repoInput'
             class:  'repo-input native-key-bindings'
-            placeholder: 'Default: mark-hahn/brtest'
+            placeholder: 'Default: atom/atom'
           @input
             outlet: 'postBtn'
             class:  'post-btn btn'
@@ -124,7 +124,7 @@ class PanelView extends View
       return
     
     userSlashRepo = @repoInput.val().replace(/\s/g, '')
-    userSlashRepo or= 'mark-hahn/brtest'
+    userSlashRepo or= 'atom/atom'
     if not (userRepo = /^([^\/]+)\/([^\/]+)$/.exec userSlashRepo)
       atom.confirm
         message: 'Bug-Report Error:\n'
