@@ -1,7 +1,8 @@
-spawnSync = require('child_process').spawnSync
 fs = require('fs')
 os = require('os')
+path = require('path')
 plist = require('plist')
+spawnSync = require('child_process').spawnSync
 PanelView = require('./panel-view')
 
 # Handles package activation and deactivation.
@@ -25,10 +26,11 @@ class BugReport
 
         [Enter description here]
 
-        - **Atom Version:** #{atom.getVersion()    }
-        - **OS Version:**   #{@osMarketingVersion()}
-        - **Misc Versions** #{@extendedVersion()   }
-        
+        * **Atom Version:** #{atom.getVersion()    }
+        * **OS Version:**   #{@osMarketingVersion()}
+        * **Misc Versions**
+        #{@extendedVersion()}
+
         ## Repro Steps
 
         1. [First Step]
@@ -42,6 +44,17 @@ class BugReport
 
       """
       new PanelView editor
+
+  # Private: Generates the apm --version text on any platform
+  #
+  # Returns a {String} containing the extended version info.
+  extendedVersion: ->
+    cmd = path.join(atom.packages.resourcePath, 'apm/node_modules/atom-package-manager/bin/apm')
+    cmd += '.cmd' if os.platform() is 'win32'
+    '    * ' + spawnSync(cmd, ['--version']).stdout.toString()
+                                .replace(/\[\d\dm/g, '')
+                                .replace(/\n\s*$/, '')
+                                .replace(/\n/g, '\n    * ')
 
   # Private: Generates the marketing version text for OS X systems.
   #
@@ -65,18 +78,6 @@ class BugReport
   # Returns a {String} containing the version text.
   winMarketingVersion: ->
     info = spawnSync('systeminfo').stdout.toString()
-    if (res = /OS.Name.\s+(.*)$/im.exec info) then res[1] else '-Unknown-'
-    
-  # Private: Generates the apm --version text on any platform
-  #
-  # Returns a {String} containing the extended version info.
-  extendedVersion: ->
-    cmd = atom.packages.resourcePath + 
-          '/apm/node_modules/atom-package-manager/bin/apm' + 
-           (if os.platform() is 'win32' then '.cmd' else '')
-    '\n  - ' + spawnSync(cmd,['--version']).stdout.toString()
-                                .replace(/\[\d\dm/g, '')
-                                .replace(/\n\s*$/, '')
-                                .replace(/\n/g, '\n  - ')
-    
+    if (res = /OS.Name.\s+(.*)$/im.exec(info)) then res[1] else 'Unknown Windows Version'
+
 module.exports = new BugReport()
