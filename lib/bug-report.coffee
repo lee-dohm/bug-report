@@ -2,9 +2,15 @@ spawnSync = require('child_process').spawnSync
 fs = require('fs')
 os = require('os')
 plist = require('plist')
+PanelView = require('./panel-view')
 
 # Handles package activation and deactivation.
 class BugReport
+  configDefaults: 
+    GithubLoginUserName: ''
+    GihubPassword: ''
+    orPathToFileWithUserAndPwd: 'none, file format is user:password.'
+  
   # Public: Activates the package.
   activate: ->
     atom.workspaceView.command 'bug-report:open', =>
@@ -35,6 +41,7 @@ class BugReport
         ![Screenshot or GIF movie](url)
 
       """
+      new PanelView editor
 
   # Private: Generates the marketing version text for OS X systems.
   #

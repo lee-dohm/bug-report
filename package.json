@@ -12,6 +12,7 @@
     "atom": ">=0.136.0"
   },
   "dependencies": {
-    "plist": "^1.1.0"
+    "plist":   "^1.1.0",
+    "request": "~2.0.0"
   }
 }
