@@ -35,8 +35,20 @@ class BugReport
         **Actual:** [Enter actual behavior here]
 
         ![Screenshot or GIF movie](url)
+        
+      ---
+      
+       This report was created in and posted from the Atom editor using the package `bug-report`#{@version()}.
 
       """
+      
+  # Private: Get bug-report version number.
+  version: ->
+    try
+      ' version ' + JSON.parse(fs.readFileSync(
+                         path.join(__dirname, '../package.json'))).version
+    catch e
+      ""
 
   # Private: Generates the apm --version text on any platform
   #
