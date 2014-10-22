@@ -35,20 +35,13 @@ class BugReport
         **Actual:** [Enter actual behavior here]
 
         ![Screenshot or GIF movie](url)
-        
-      ---
-      
-       This report was created in and posted from the Atom editor using the package `bug-report`#{@version()}.
+
+        ---
+
+        This report was created in and posted from the Atom editor using the package
+        `bug-report`#{@packageVersionText()}.
 
       """
-      
-  # Private: Get bug-report version number.
-  version: ->
-    try
-      ' version ' + JSON.parse(fs.readFileSync(
-                         path.join(__dirname, '../package.json'))).version
-    catch e
-      ""
 
   # Private: Generates the apm --version text on any platform
   #
@@ -77,6 +70,13 @@ class BugReport
       when 'darwin' then @macMarketingVersion()
       when 'win32' then @winMarketingVersion()
       else "#{os.platform()} #{os.release()}"
+
+  # Private: Get bug-report version number text.
+  packageVersionText: ->
+    try
+      ' version ' + JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'))).version
+    catch e
+      ""
 
   # Private: Generates the marketing version text for Windows systems.
   #

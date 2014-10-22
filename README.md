@@ -23,14 +23,14 @@ Sample template:
 
 [Enter description here]
 
-* **Atom Version:** 0.139.0-a4f6c67
+* **Atom Version:** 0.139.0-4867e3e
 * **OS Version:**   Mac OS X 10.10
 * **Misc Versions**
-    * apm  0.106.0
-    * npm  1.4.4
-    * node 0.10.32
-    * python 2.7.6
-    * git 2.0.3
+	* apm  0.106.0
+	* npm  1.4.4
+	* node 0.10.32
+	* python 2.7.6
+	* git 2.0.3
 
 ## Repro Steps
 
@@ -42,6 +42,11 @@ Sample template:
 **Actual:** [Enter actual behavior here]
 
 ![Screenshot or GIF movie](url)
+
+---
+
+This report was created in and posted from the Atom editor using the package
+`bug-report` version 0.2.0.
 
 ```
 
