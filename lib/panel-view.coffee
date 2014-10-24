@@ -56,9 +56,9 @@ class PanelView extends View
     oldView?.destroy()
     oldView = @
 
-    saveToken = atom.config.get 'bug-report.saveTokenToFile'
+    saveToken = atom.config.get 'bug-report.saveToken'
     if saveToken and
-        fs.existsSync atom.config.get 'bug-report.filePathToSaveGithubPersonalApiToken'
+        fs.existsSync atom.config.get 'bug-report.tokenPath'
       @tokenInput.attr placeholder: 'Default: stored in file'
 
     @subscribe @titleInput, 'keydown', (e) =>
@@ -120,8 +120,8 @@ class PanelView extends View
       return
 
     token = @tokenInput.val().replace(/\s/g, '')
-    saveToken = atom.config.get 'bug-report.saveTokenToFile'
-    tokenPath = atom.config.get 'bug-report.filePathToSaveGithubPersonalApiToken'
+    saveToken = atom.config.get 'bug-report.saveToken'
+    tokenPath = atom.config.get 'bug-report.tokenPath'
     if not token and saveToken
       try
         token = fs.readFileSync tokenPath
@@ -131,7 +131,7 @@ class PanelView extends View
         try
           fs.writeFileSync tokenPath, token
         catch e
-          console.log 'bug-report: error writing token to path "' + tokenPath + '". ' + e.message
+          console.log "bug-report: error writing token to path #{tokenPath}. #{e.message}"
     else
       atom.confirm
         message: 'Bug-Report Error:\n'

@@ -76,10 +76,10 @@ Once you have posted you will not be able to post this same report again. If you
 
 ![Bug Report Configuration](https://raw.githubusercontent.com/lee-dohm/bug-report/master/images/configuration.gif)
 
-* `bug-report.filePathToSaveGithubPersonalApiToken` &mdash; Path at which the API token will be saved if `bug-report.saveTokenToFile` is enabled.
-* `bug-report.saveTokenToFile`
-    * `true` &mdash; Saves the token in the file specified by `bug-report.filePathToSaveGithubPersonalApiToken`
+* `bug-report.saveToken`
+    * `true` &mdash; Saves the token in the file specified by `tokenPath`
     * `false` &mdash; Does not save the token. It will need to be entered each time a report is posted on your behalf.
+* `bug-report.tokenPath` &mdash; Path at which the API token will be saved if `saveToken` is enabled.
 
 ### Commands
 

@@ -13,10 +13,10 @@ defaultTokenPath = if process.platform is 'win32'
 # Handles package activation and deactivation.
 class BugReport
   config:
-    saveTokenToFile:
+    saveToken:
       type: 'boolean'
       default: true
-    filePathToSaveGithubPersonalApiToken:
+    tokenPath:
       type: 'string'
       default: defaultTokenPath
 
