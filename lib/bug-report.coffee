@@ -3,9 +3,16 @@ os = require('os')
 path = require('path')
 plist = require('plist')
 spawnSync = require('child_process').spawnSync
+PanelView = require('./panel-view')
+
+home = process.env[if process.platform is 'win32' then 'USERPROFILE' else 'HOME']
 
 # Handles package activation and deactivation.
 class BugReport
+  configDefaults: 
+    saveTokenToFile: yes
+    filePathToSaveGithubPersonalApiToken: path.join home, 'bug-report.token'
+    
   # Public: Activates the package.
   activate: ->
     atom.workspaceView.command 'bug-report:open', =>
@@ -13,7 +20,7 @@ class BugReport
 
   # Public: Opens the bug report.
   open: ->
-    atom.workspace.open().then (editor) =>
+    atom.workspace.open('bug-report.md').then (editor) =>
       editor.setGrammar(atom.syntax.grammarForScopeName('source.gfm'))
       editor.setText """
         # Bug Report
@@ -42,6 +49,15 @@ class BugReport
         `bug-report`#{@packageVersionText()}.
 
       """
+      new PanelView editor
+      
+  # Private: Get bug-report version number.
+  version: ->
+    try
+      ' version ' + JSON.parse(fs.readFileSync(
+                         path.join(__dirname, '../package.json'))).version
+    catch e
+      ""
 
   # Private: Generates the apm --version text on any platform
   #

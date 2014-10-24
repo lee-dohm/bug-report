@@ -1,0 +1,76 @@
+
+// stylesheets\bug-report.less
+
+@import "ui-variables";
+
+.workspace .bug-report-panel {
+    position:   relative; 
+    width:      100%;
+    padding-top: 8px;
+    font-size: 14px;
+    background-image: 
+      -webkit-linear-gradient(top, 
+        @app-background-color, @tab-bar-background-color);
+  
+  .label-hdr {
+    display: inline-block;
+    margin-left: 10px;
+    font-weight: bold;
+  }
+  
+  .pre-post, .post-msg, .post-post {
+    display: inline-block;
+    min-height: 28px;
+    margin-left: 20px;
+  }
+  
+  .pre-post {
+    display: inline-div;
+    .horiz-div  { display: inline-block; }
+    .inp-label { 
+      display: inline-block;
+      margin-right: 6px; 
+    }
+    
+    input {
+      height:         21px;
+      padding-left:    8px;
+      padding-right:   2px;
+      box-shadow:     none;
+      border-radius:   4px;
+      border: 1px solid @input-border-color;
+      color:            @text-color;
+      background-color: @input-background-color;
+      margin-right: 20px;
+    }
+    .title-input { width: 300px; }
+    .repo-input  { width: 200px; }
+    
+    .post-btn {
+      position: relative;
+      top:          -1px; 
+      font-size:    14px;
+      line-height:     0;
+      height:       20px;
+      padding-right: 5px;
+    }
+  }
+  
+  .post-msg {
+    display: none;
+    width: 300px;
+  }
+    
+  .post-post {
+    display: none;
+    a {
+      color: @text-color-highlight !important;
+      text-decoration: underline;
+    }
+    .close-btn {
+      margin-left: 20px;
+      height:      20px;
+    }
+  }
+}
+
