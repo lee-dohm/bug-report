@@ -5,13 +5,20 @@ plist = require('plist')
 spawnSync = require('child_process').spawnSync
 PanelView = require('./panel-view')
 
-home = process.env[if process.platform is 'win32' then 'USERPROFILE' else 'HOME']
+defaultTokenPath = if process.platform is 'win32'
+                     path.join(process.env['USERPROFILE'], 'bug-report.token')
+                   else
+                     path.join(process.env['HOME'], '.bug-report.token')
 
 # Handles package activation and deactivation.
 class BugReport
-  configDefaults:
-    saveTokenToFile: yes
-    filePathToSaveGithubPersonalApiToken: path.join home, 'bug-report.token'
+  config:
+    saveTokenToFile:
+      type: 'boolean'
+      default: true
+    filePathToSaveGithubPersonalApiToken:
+      type: 'string'
+      default: defaultTokenPath
 
   # Public: Activates the package.
   activate: ->
