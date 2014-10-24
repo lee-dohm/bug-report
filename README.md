@@ -74,7 +74,7 @@ Once you have posted you will not be able to post this same report again. If you
 
 ## Configuration
 
-![Bug Report Configuration](https://raw.githubusercontent.com/lee-dohm/bug-report/master/images/configuration.gif)
+![Bug Report Configuration](https://raw.githubusercontent.com/lee-dohm/bug-report/master/images/configuration.png)
 
 * `bug-report.saveToken`
     * `true` &mdash; Saves the token in the file specified by `tokenPath`
