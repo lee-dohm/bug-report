@@ -58,14 +58,6 @@ class BugReport
       """
       new PanelView editor
 
-  # Private: Get bug-report version number.
-  version: ->
-    try
-      ' version ' + JSON.parse(fs.readFileSync(
-                         path.join(__dirname, '../package.json'))).version
-    catch e
-      ""
-
   # Private: Generates the apm --version text on any platform
   #
   # Returns a {String} containing the extended version info.
