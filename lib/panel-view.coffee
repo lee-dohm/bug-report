@@ -2,6 +2,9 @@
 fs      = require 'fs'
 request = require 'request'
 
+TAB = 9      # Keydown: TAB key
+RETURN = 13  # Keydown: RETURN key
+
 oldView = null
 
 module.exports =
@@ -63,22 +66,22 @@ class PanelView extends View
 
     @subscribe @titleInput, 'keydown', (e) =>
       switch e.which
-        when  9 then @repoInput.focus() # tab
-        when 13 then @post()            # cr
+        when TAB then @repoInput.focus()
+        when RETURN then @post()
         else return
       false
 
     @subscribe @repoInput, 'keydown',  (e) =>
       switch e.which
-        when  9 then @tokenInput.focus() # tab
-        when 13 then @post()             # cr
+        when TAB then @tokenInput.focus()
+        when RETURN then @post()
         else return
       false
 
     @subscribe @tokenInput, 'keydown',  (e) =>
       switch e.which
-        when  9 then @titleInput.focus() # tab
-        when 13 then @post()             # cr
+        when TAB then @titleInput.focus()
+        when RETURN then @post()
         else return
       false
 
