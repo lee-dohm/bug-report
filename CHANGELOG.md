@@ -1,15 +1,20 @@
 # CHANGELOG
 
+## **v0.3.0** &mdash; *Released: 24 October 2014*
+
+* [PR #11](https://github.com/lee-dohm/bug-report/pull/11) by [@mark-hahn](https://github.com/mark-hahn)
+    * Add ability to post bug reports directly to GitHub Issues
+
 ## **v0.2.1** &mdash; *Released: 22 October 2014*
 
 * [PR #10](https://github.com/lee-dohm/bug-report/pull/10) by [@mark-hahn](https://github.com/mark-hahn)
-	* Added viral signature to generated bug reports
+    * Added viral signature to generated bug reports
 
 ## **v0.2.0** &mdash; *Released: 19 October 2014*
 
 * [PR #7](https://github.com/lee-dohm/bug-report/pull/7) by [@mark-hahn](https://github.com/mark-hahn)
-	* :bug: [#6](https://github.com/lee-dohm/bug-report/issues/1) &mdash; Reports Windows version correctly
-	* [#2](https://github.com/lee-dohm/bug-report/issues/1) &mdash; Reports versions of other Atom components
+    * :bug: [#6](https://github.com/lee-dohm/bug-report/issues/1) &mdash; Reports Windows version correctly
+    * [#2](https://github.com/lee-dohm/bug-report/issues/1) &mdash; Reports versions of other Atom components
 
 ## **v0.1.1** &mdash; *Released: 17 October 2014*
 
