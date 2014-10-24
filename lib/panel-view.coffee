@@ -136,7 +136,7 @@ class PanelView extends View
       atom.confirm
         message: 'Bug-Report Error:\n'
         detailedMessage: 'You must enter a GitHub personal API token. ' +
-                          'See https://github.com/blog/1509-personal-api-tokens.'
+                          'See https://help.github.com/articles/creating-an-access-token-for-command-line-use/'
         buttons: ['OK']
       return
 
