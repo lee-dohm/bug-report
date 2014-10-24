@@ -28,7 +28,6 @@ class BugReport
   # Public: Opens the bug report.
   open: ->
     atom.workspace.open('bug-report.md').then (editor) =>
-      editor.setGrammar(atom.syntax.grammarForScopeName('source.gfm'))
       editor.setText """
         # Bug Report
 
