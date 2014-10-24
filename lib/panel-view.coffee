@@ -1,6 +1,3 @@
-
-# lib/panel-view
-
 {View}  = require 'atom'
 fs      = require 'fs'
 request = require 'request'
