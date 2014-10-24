@@ -9,10 +9,10 @@ home = process.env[if process.platform is 'win32' then 'USERPROFILE' else 'HOME'
 
 # Handles package activation and deactivation.
 class BugReport
-  configDefaults: 
+  configDefaults:
     saveTokenToFile: yes
     filePathToSaveGithubPersonalApiToken: path.join home, 'bug-report.token'
-    
+
   # Public: Activates the package.
   activate: ->
     atom.workspaceView.command 'bug-report:open', =>
@@ -50,7 +50,7 @@ class BugReport
 
       """
       new PanelView editor
-      
+
   # Private: Get bug-report version number.
   version: ->
     try
