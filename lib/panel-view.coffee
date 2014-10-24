@@ -149,7 +149,7 @@ class PanelView extends View
       url: url
       method: 'POST'
       headers:
-        "User-Agent": "lee-bohm"
+        "User-Agent": "lee-dohm"
         Authorization: 'token ' + token
       json: true
       body:
