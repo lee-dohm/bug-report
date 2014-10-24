@@ -70,7 +70,7 @@ Instructions:
     * By default, this token is saved for future sessions. See the [Configuration](#configuration) section for more information.
 1. Click `Post Issue`. It should only take a few seconds for Bug Report to post the Issue, after which the panel will show you a link to it.
 
-Once you have posted you will not be able to post this same report again. If you wish you may copy this report and open a new one to start over.
+Once you have posted you will not be able to post this same report again. If you wish, you may copy this report and open a new one to start over.
 
 ## Configuration
 
