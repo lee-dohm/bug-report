@@ -1,7 +1,7 @@
 {
   "name": "bug-report",
   "main": "./lib/bug-report",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Creates a nicely formatted Markdown file for reporting an Atom bug and posts the issue to a GitHub repo.",
   "activationEvents": [
     "bug-report:open"
@@ -12,7 +12,7 @@
     "atom": ">=0.136.0"
   },
   "dependencies": {
-    "plist":   "^1.1.0",
+    "plist": "^1.1.0",
     "request": "~2.0.0"
   }
 }
