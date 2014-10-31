@@ -96,7 +96,7 @@ class BugReport
       JSON.parse(fs.readFileSync(path.join(atom.getLoadSettings().resourcePath, 'package.json'))).atomShellVersion
     catch e
       ""
-      
+
   # Private: Generates the marketing version text for Windows systems.
   #
   # Returns a {String} containing the version text.
