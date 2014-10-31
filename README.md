@@ -58,7 +58,7 @@ When you create a new report, a pane will appear below the editor that enables p
 
 ![Bug Report Post Form](https://raw.githubusercontent.com/lee-dohm/bug-report/master/images/form.gif)
 
-For the Bug Report package to post on your behalf, you need to supply a GitHub API token. You may obtain one by [following the instructions](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) on GitHub.
+For the Bug Report package to post on your behalf, you need to supply a GitHub API token. You may obtain one by [following the instructions](https://help.github.com/articles/creating-an-access-token-for-command-line-use/) on GitHub. Your token will need at least the `repo` or `public repo` permission for posting to work.
 
 Instructions:
 
