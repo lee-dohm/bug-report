@@ -31,8 +31,9 @@ class BugReport
       editor.setText """
         [Enter description here]
 
-        * **Atom Version:** #{atom.getVersion()    }
-        * **OS Version:**   #{@osMarketingVersion()}
+        * **Atom Version:**       #{atom.getVersion()}
+        * **Atom-Shell Version:** #{@atomShellVersionText()}
+        * **OS Version:**         #{@osMarketingVersion()}
         * **Misc Versions**
         #{@extendedVersion()}
 
@@ -89,6 +90,13 @@ class BugReport
     catch e
       ""
 
+  # Private: Get atom-shell version number text.
+  atomShellVersionText: ->
+    try
+      JSON.parse(fs.readFileSync(path.join(atom.getLoadSettings().resourcePath, 'package.json'))).atomShellVersion
+    catch e
+      ""
+      
   # Private: Generates the marketing version text for Windows systems.
   #
   # Returns a {String} containing the version text.
