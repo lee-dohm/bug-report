@@ -3,6 +3,7 @@
 ## **master** &mdash; *Unreleased*
 
 * :bug: [#18](https://github.com/lee-dohm/bug-report/issues/18) &mdash; Added permission requirements to the README
+* [#21](https://github.com/lee-dohm/bug-report/issues/21) &mdash; Added Atom Shell version to report
 
 ## **v0.3.0** &mdash; *Released: 24 October 2014*
 
