@@ -29,8 +29,6 @@ class BugReport
   open: ->
     atom.workspace.open('bug-report.md').then (editor) =>
       editor.setText """
-        # Bug Report
-
         [Enter description here]
 
         * **Atom Version:** #{atom.getVersion()    }
@@ -51,8 +49,7 @@ class BugReport
 
         ---
 
-        This report was created in and posted from the Atom editor using the package
-        `bug-report`#{@packageVersionText()}.
+        <small>This report was created in and posted from the Atom editor using the package `bug-report`#{@packageVersionText()}.</small>
 
       """
       new PanelView editor
