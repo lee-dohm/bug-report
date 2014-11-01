@@ -168,7 +168,6 @@ class PanelView extends View
             (res?.statusCode    ? '') + '  ' +
             (res?.statusMessage ? '') + '  ' +
             (res?.body          ? '')
-        console.log 'detailedMessage', JSON.stringify detailedMessage
         detailedMessage = detailedMessage.replace \
           'Not Found  404  Not Found  [object Object]', """
             A 404 error was returned when posting this issue.  
