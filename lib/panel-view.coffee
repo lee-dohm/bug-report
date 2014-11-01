@@ -161,7 +161,6 @@ class PanelView extends View
 
     request options, (err, res, body) =>
       if err or body?.message or res?.statusCode isnt 201
-        console.log 'bug-report post error:',  {options, err, res, body}
         detailedMessage =
           'Error posting to GitHub repo ' + url + '\n\n' +
             (err?.message       ? '') + '  ' +
