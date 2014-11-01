@@ -22,14 +22,14 @@ class BugReport
 
   # Public: Activates the package.
   activate: ->
-    atom.workspaceView.command 'bug-report:open', =>
-      @open()
+    atom.workspaceView.command 'bug-report:open', (e, commandArg) =>
+      @open (if commandArg then '\n\n' + commandArg else '')
 
   # Public: Opens the bug report.
-  open: ->
+  open: (commandArg) ->
     atom.workspace.open('bug-report.md').then (editor) =>
       editor.setText """
-        [Enter description here]
+        [Enter description here] #{commandArg}
 
         * **Atom Version:** #{atom.getVersion()    }
         * **OS Version:**   #{@osMarketingVersion()}
