@@ -42,6 +42,14 @@ Sample template:
 **Expected:** [Enter expected behavior here]
 **Actual:** [Enter actual behavior here]
 
+## Command History:
+     -0:03.1 ready
+     -0:03.0 focus
+     -0:02.8 editor:display-updated
+     -0:02.6 pane:active-item-modified-status-changed
+  3x -0:02.5 editor:display-updated
+     -0:00.0 bug-report:open
+
 ![Screenshot or GIF movie](url)
 
 ---

@@ -4,6 +4,7 @@ path = require('path')
 plist = require('plist')
 spawnSync = require('child_process').spawnSync
 PanelView = require('./panel-view')
+CommandLogger = require('./command-logger')
 
 defaultTokenPath = if process.platform is 'win32'
                      path.join(process.env['USERPROFILE'], 'bug-report.token')
@@ -22,6 +23,7 @@ class BugReport
 
   # Public: Activates the package.
   activate: ->
+    @commandLogger = new CommandLogger
     atom.workspaceView.command 'bug-report:open', (e, errorInfo) =>
       @open()
 
@@ -47,6 +49,9 @@ class BugReport
 
         **Expected:** [Enter expected behavior here]
         **Actual:** [Enter actual behavior here]
+
+        ## Command History:
+        #{@commandLogger.getText()}
 
         ![Screenshot or GIF movie](url)
 
