@@ -170,11 +170,11 @@ class PanelView extends View
             (res?.body          ? '')
         detailedMessage = detailedMessage.replace \
           'Not Found  404  Not Found  [object Object]', """
-            A 404 error was returned when posting this issue.  
-            This is usually caused by an authentication problem 
-            such as a bad token. The token must have at least 
-            "repo" or "public repo" permission. See the 
-            instructions in the readme for obtaining a 
+            A 404 error was returned when posting this issue.
+            This is usually caused by an authentication problem
+            such as a bad token. The token must have at least
+            "repo" or "public repo" permission. See the
+            instructions in the readme for obtaining a
             GitHub API Token.
           """
         atom.confirm
