@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## **master** &mdash; *Unreleased*
+## **v0.4.0** &mdash; *Released: 1 November 2014*
 
 * :bug: [#18](https://github.com/lee-dohm/bug-report/issues/18) &mdash; Added permission requirements to the README
 * [PR #22](https://github.com/lee-dohm/bug-report/pull/22) by [@mark-hahn](https://github.com/mark-hahn)
