@@ -162,14 +162,26 @@ class PanelView extends View
     request options, (err, res, body) =>
       if err or body?.message or res?.statusCode isnt 201
         console.log 'bug-report post error:',  {options, err, res, body}
+        detailedMessage =
+          'Error posting to GitHub repo ' + url + '\n\n' +
+            (err?.message       ? '') + '  ' +
+            (body?.message      ? '') + '  ' +
+            (res?.statusCode    ? '') + '  ' +
+            (res?.statusMessage ? '') + '  ' +
+            (res?.body          ? '')
+        console.log 'detailedMessage', JSON.stringify detailedMessage
+        detailedMessage = detailedMessage.replace \
+          'Not Found  404  Not Found  [object Object]', """
+            A 404 error was returned when posting this issue.  
+            This is usually caused by an authentication problem 
+            such as a bad token. The token must have at least 
+            "repo" or "public repo" permission. See the 
+            instructions in the readme for obtaining a 
+            GitHub API Token.
+          """
         atom.confirm
           message: 'Bug-Report Error:\n'
-          detailedMessage: 'Error posting to GitHub repo ' + url + '\n\n' +
-                              (err?.message       ? '') + '  ' +
-                              (body?.message      ? '') + '  ' +
-                              (res?.statusCode    ? '') + '  ' +
-                              (res?.statusMessage ? '') + '  ' +
-                              (res?.body          ? '')
+          detailedMessage: detailedMessage
           buttons: ['OK']
         @prePost.css display:'inline-block'
         @postMsg.hide()
