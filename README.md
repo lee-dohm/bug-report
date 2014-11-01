@@ -21,18 +21,17 @@ Execute the `bug-report:open` command (`ctrl-alt-shift-B` by default) and a new 
 Sample template:
 
 ```markdown
-# Bug Report
-
 [Enter description here]
 
-* **Atom Version:** 0.139.0-4867e3e
-* **OS Version:**   Mac OS X 10.10
+* **Atom Version:**       0.142.0-427a32c
+* **Atom-Shell Version:** 0.18.2
+* **OS Version:**         Mac OS X 10.10
 * **Misc Versions**
-    * apm  0.106.0
+    * apm  0.109.0
     * npm  1.4.4
     * node 0.10.32
     * python 2.7.6
-    * git 2.0.3
+    * git 2.1.2
 
 ## Repro Steps
 
@@ -47,9 +46,7 @@ Sample template:
 
 ---
 
-This report was created in and posted from the Atom editor using the package
-`bug-report` version 0.2.0.
-
+<small>This report was created in and posted from the Atom editor using the package `bug-report` version 0.3.0.</small>
 ```
 
 ### Automatic Posting to GitHub
