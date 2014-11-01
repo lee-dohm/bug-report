@@ -7,6 +7,8 @@
     * [#21](https://github.com/lee-dohm/bug-report/issues/21) &mdash; Added Atom Shell version to report
 * [PR #24](https://github.com/lee-dohm/bug-report/pull/24) by [@mark-hahn](https://github.com/mark-hahn)
     * [#13](https://github.com/lee-dohm/bug-report/issues/13) &mdash; Replaced 404 with more extensive error message
+* [PR #23](https://github.com/lee-dohm/bug-report/pull/23) by [@mark-hahn](https://github.com/mark-hahn)
+    * [#15](https://github.com/lee-dohm/bug-report/issues/15) &mdash; Added integration with [@postcasio's](https://github.com/postcasio) package [error-status](https://atom.io/packages/error-status)
 
 ## **v0.3.0** &mdash; *Released: 24 October 2014*
 

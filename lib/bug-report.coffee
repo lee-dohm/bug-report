@@ -22,20 +22,22 @@ class BugReport
 
   # Public: Activates the package.
   activate: ->
-    atom.workspaceView.command 'bug-report:open', (e, commandArg) =>
-      @open (if commandArg then '\n\n' + commandArg else '')
+    atom.workspaceView.command 'bug-report:open', (e, errorInfo) =>
+      @open()
 
   # Public: Opens the bug report.
-  open: (commandArg) ->
+  open: (errorInfo) ->
     atom.workspace.open('bug-report.md').then (editor) =>
       editor.setText """
-        [Enter description here] #{commandArg}
+        [Enter description here]
 
         * **Atom Version:**       #{atom.getVersion()}
         * **Atom-Shell Version:** #{@atomShellVersionText()}
         * **OS Version:**         #{@osMarketingVersion()}
         * **Misc Versions**
         #{@extendedVersion()}
+
+        #{@errorSection(errorInfo)}
 
         ## Repro Steps
 
@@ -54,6 +56,26 @@ class BugReport
 
       """
       new PanelView editor
+
+  # Private: Get atom-shell version number text.
+  atomShellVersionText: ->
+    try
+      JSON.parse(fs.readFileSync(path.join(atom.getLoadSettings().resourcePath, 'package.json'))).atomShellVersion
+    catch e
+      ""
+
+  # Private: Creates the error information section if any was supplied.
+  #
+  # Returns a {String} containing the entire error information section.
+  errorSection: (errorInfo) ->
+    if errorInfo
+      """
+      ## Error Information
+
+      #{errorInfo}
+      """
+    else
+      ''
 
   # Private: Generates the apm --version text on any platform
   #
@@ -87,13 +109,6 @@ class BugReport
   packageVersionText: ->
     try
       ' version ' + JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'))).version
-    catch e
-      ""
-
-  # Private: Get atom-shell version number text.
-  atomShellVersionText: ->
-    try
-      JSON.parse(fs.readFileSync(path.join(atom.getLoadSettings().resourcePath, 'package.json'))).atomShellVersion
     catch e
       ""
 
