@@ -8,56 +8,7 @@ ignoredCommands =
   'show.bs.tooltip':   yes
   'shown.bs.tooltip':  yes
   'hide.bs.tooltip':   yes
-  'hidden.bs.tooltip': yes
-  
-prop =
-  getOwnEnumerables: (obj) ->
-    @_getPropertyNames obj, true, false, @_enumerable
-
-  getOwnNonenumerables: (obj) ->
-    @_getPropertyNames obj, true, false, @_notEnumerable
-
-  getOwnEnumerablesAndNonenumerables: (obj) ->
-    @_getPropertyNames obj, true, false, @_enumerableAndNotEnumerable
-
-  getPrototypeEnumerables: (obj) ->
-    @_getPropertyNames obj, false, true, @_enumerable
-
-  getPrototypeNonenumerables: (obj) ->
-    @_getPropertyNames obj, false, true, @_notEnumerable
-
-  getPrototypeEnumerablesAndNonenumerables: (obj) ->
-    @_getPropertyNames obj, false, true, @_enumerableAndNotEnumerable
-
-  getOwnAndPrototypeEnumerables: (obj) ->
-    @_getPropertyNames obj, true, true, @_enumerable
-
-  getOwnAndPrototypeNonenumerables: (obj) ->
-    @_getPropertyNames obj, true, true, @_notEnumerable
-
-  getOwnAndPrototypeEnumerablesAndNonenumerables: (obj) ->
-    @_getPropertyNames obj, true, true, @_enumerableAndNotEnumerable
-
-  _enumerable: (obj, prop) ->
-    obj.propertyIsEnumerable prop
-
-  _notEnumerable: (obj, prop) ->
-    not obj.propertyIsEnumerable(prop)
-
-  _enumerableAndNotEnumerable: (obj, prop) ->
-    true
-
-  _getPropertyNames: getAllPropertyNames = (obj, iterateSelfBool, iteratePrototypeBool, includePropCb) ->
-    props = []
-    loop
-      if iterateSelfBool
-        Object.getOwnPropertyNames(obj).forEach (prop) ->
-          props.push prop  if props.indexOf(prop) is -1 and includePropCb(obj, prop)
-      break  unless iteratePrototypeBool
-      iterateSelfBool = true
-      break unless obj = Object.getPrototypeOf(obj)
-    props
-    
+  'hidden.bs.tooltip': yes    
 
 module.exports =
 class CommandLogger
