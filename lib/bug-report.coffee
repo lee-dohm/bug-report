@@ -4,6 +4,7 @@ path = require('path')
 plist = require('plist')
 spawnSync = require('child_process').spawnSync
 PanelView = require('./panel-view')
+CommandLogger = require('./command-logger')
 
 defaultTokenPath = if process.platform is 'win32'
                      path.join(process.env['USERPROFILE'], 'bug-report.token')
@@ -22,7 +23,13 @@ class BugReport
 
   # Public: Activates the package.
   activate: ->
-    atom.workspaceView.command 'bug-report:open', (e, errorInfo) =>
+    @commandLogger = new CommandLogger
+    atom.workspaceView.command 'bug-report:open', (e, @cmdArgInfo) =>
+      if @cmdArgInfo and not @cmdArgInfo.body
+        @cmdArgInfo = 
+          title: 'Error'
+          time:   Date.now()
+          body:   @cmdArgInfo
       @open()
 
   # Public: Opens the bug report.
@@ -37,7 +44,7 @@ class BugReport
         * **Misc Versions**
         #{@extendedVersion()}
 
-        #{@errorSection(errorInfo)}
+        #{@errorSection()}
 
         ## Repro Steps
 
@@ -47,6 +54,9 @@ class BugReport
 
         **Expected:** [Enter expected behavior here]
         **Actual:** [Enter actual behavior here]
+
+        ## Command History:
+        #{@commandLogger.getText(@cmdArgInfo)}
 
         ![Screenshot or GIF movie](url)
 
@@ -67,12 +77,11 @@ class BugReport
   # Private: Creates the error information section if any was supplied.
   #
   # Returns a {String} containing the entire error information section.
-  errorSection: (errorInfo) ->
-    if errorInfo
+  errorSection: ->
+    if @cmdArgInfo
       """
-      ## Error Information
-
-      #{errorInfo}
+      ---
+      #{@cmdArgInfo.body}
       """
     else
       ''
