@@ -9,6 +9,55 @@ ignoredCommands =
   'shown.bs.tooltip':  yes
   'hide.bs.tooltip':   yes
   'hidden.bs.tooltip': yes
+  
+prop =
+  getOwnEnumerables: (obj) ->
+    @_getPropertyNames obj, true, false, @_enumerable
+
+  getOwnNonenumerables: (obj) ->
+    @_getPropertyNames obj, true, false, @_notEnumerable
+
+  getOwnEnumerablesAndNonenumerables: (obj) ->
+    @_getPropertyNames obj, true, false, @_enumerableAndNotEnumerable
+
+  getPrototypeEnumerables: (obj) ->
+    @_getPropertyNames obj, false, true, @_enumerable
+
+  getPrototypeNonenumerables: (obj) ->
+    @_getPropertyNames obj, false, true, @_notEnumerable
+
+  getPrototypeEnumerablesAndNonenumerables: (obj) ->
+    @_getPropertyNames obj, false, true, @_enumerableAndNotEnumerable
+
+  getOwnAndPrototypeEnumerables: (obj) ->
+    @_getPropertyNames obj, true, true, @_enumerable
+
+  getOwnAndPrototypeNonenumerables: (obj) ->
+    @_getPropertyNames obj, true, true, @_notEnumerable
+
+  getOwnAndPrototypeEnumerablesAndNonenumerables: (obj) ->
+    @_getPropertyNames obj, true, true, @_enumerableAndNotEnumerable
+
+  _enumerable: (obj, prop) ->
+    obj.propertyIsEnumerable prop
+
+  _notEnumerable: (obj, prop) ->
+    not obj.propertyIsEnumerable(prop)
+
+  _enumerableAndNotEnumerable: (obj, prop) ->
+    true
+
+  _getPropertyNames: getAllPropertyNames = (obj, iterateSelfBool, iteratePrototypeBool, includePropCb) ->
+    props = []
+    loop
+      if iterateSelfBool
+        Object.getOwnPropertyNames(obj).forEach (prop) ->
+          props.push prop  if props.indexOf(prop) is -1 and includePropCb(obj, prop)
+      break  unless iteratePrototypeBool
+      iterateSelfBool = true
+      break unless obj = Object.getPrototypeOf(obj)
+    props
+    
 
 module.exports =
 class CommandLogger
@@ -24,7 +73,16 @@ class CommandLogger
     @initLog()
     
     addEventToLog = (e) =>
-      name = e.type ? e
+      if typeof e is 'string' then name = e
+      else 
+        name = e.type
+        # the following doesn't work because the event object is weird
+        # the console says e.target is defined but this code thinks it isn't
+        # if (tgt = e.target)
+        #   name += ' ' + tgt.nodeName
+        #   if tgt.id then name += '#' + tgt.id
+        #   if tgt.classList?.length then name += '.' + tgt.classList.join '.'
+      
       entry = @eventLog[@logIdxPos]
       if entry.name is name then entry.count++
       else
@@ -44,15 +102,18 @@ class CommandLogger
     @keymapMatchedSubscription = atom.keymap.on 'matched', ({binding}) =>
       addEventToLog binding.command
       
-  getText: ->
+  getText: (cmdArgInfo) ->
     text    = '```\n'
     dateFmt = 'm:ss.S'
-    for ofs in [1..logSize]
-      {name, time} = @eventLog[(@logIdxPos + ofs) & logSizeMask]
-      lastTime = time
-      if name is 'bug-report:open' then break
+    if cmdArgInfo then lastTime = cmdArgInfo.time
+    else
+      for ofs in [1..logSize]
+        {name, time} = @eventLog[(@logIdxPos + ofs) & logSizeMask]
+        lastTime = time
+        if name is 'bug-report:open' then break
     for ofs in [1..logSize]
       {name, count, time} = @eventLog[(@logIdxPos + ofs) & logSizeMask]
+      if time > lastTime then break
       if name is 'empty' or lastTime - time >= 10*60*1000 then continue
       text += switch
         when count < 10 then '  '
@@ -61,6 +122,9 @@ class CommandLogger
         '-' + moment(lastTime - time).format(dateFmt) +
         ' ' + name + '\n'
       if name is 'bug-report:open' then break
+    if cmdArgInfo
+      text += '     -' + moment(0).format(dateFmt) + 
+              ' ' + cmdArgInfo.title + '\n'
     @initLog()
     text + '```'
 

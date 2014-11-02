@@ -24,7 +24,12 @@ class BugReport
   # Public: Activates the package.
   activate: ->
     @commandLogger = new CommandLogger
-    atom.workspaceView.command 'bug-report:open', (e, errorInfo) =>
+    atom.workspaceView.command 'bug-report:open', (e, @cmdArgInfo) =>
+      if @cmdArgInfo and not @cmdArgInfo.body
+        @cmdArgInfo = 
+          title: 'Error'
+          time:   Date.now()
+          body:   @cmdArgInfo
       @open()
 
   # Public: Opens the bug report.
@@ -39,7 +44,7 @@ class BugReport
         * **Misc Versions**
         #{@extendedVersion()}
 
-        #{@errorSection(errorInfo)}
+        #{@errorSection()}
 
         ## Repro Steps
 
@@ -51,7 +56,7 @@ class BugReport
         **Actual:** [Enter actual behavior here]
 
         ## Command History:
-        #{@commandLogger.getText()}
+        #{@commandLogger.getText(@cmdArgInfo)}
 
         ![Screenshot or GIF movie](url)
 
@@ -72,12 +77,11 @@ class BugReport
   # Private: Creates the error information section if any was supplied.
   #
   # Returns a {String} containing the entire error information section.
-  errorSection: (errorInfo) ->
-    if errorInfo
+  errorSection: ->
+    if @cmdArgInfo
       """
-      ## Error Information
-
-      #{errorInfo}
+      ---
+      #{@cmdArgInfo.body}
       """
     else
       ''
