@@ -23,7 +23,7 @@ class BugReport
   # Public: Activates the package.
   activate: ->
     atom.workspaceView.command 'bug-report:open', (e, errorInfo) =>
-      @open()
+      @open(errorInfo)
 
   # Public: Opens the bug report.
   open: (errorInfo) ->

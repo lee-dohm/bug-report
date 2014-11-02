@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## **v0.4.1** &mdash; *Released: 2 November 2014*
+
+* Fixed passing of error info to report
+
 ## **v0.4.0** &mdash; *Released: 1 November 2014*
 
 * :bug: [#18](https://github.com/lee-dohm/bug-report/issues/18) &mdash; Added permission requirements to the README
