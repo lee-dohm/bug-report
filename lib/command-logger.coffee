@@ -14,9 +14,9 @@ module.exports =
 class CommandLogger
   
   initLog: ->
-    @logIdxPos = 0
+    @logIndex = 0
     @eventLog = for i in [0...logSize]
-      name: 'empty'
+      name: null
       count: 0
       time: null
   
@@ -24,22 +24,13 @@ class CommandLogger
     @initLog()
     
     addEventToLog = (e) =>
-      if typeof e is 'string' then name = e
-      else 
-        name = e.type
-        # the following doesn't work because the event object is weird
-        # the console says e.target is defined but this code thinks it isn't
-        # if (tgt = e.target)
-        #   name += ' ' + tgt.nodeName
-        #   if tgt.id then name += '#' + tgt.id
-        #   if tgt.classList?.length then name += '.' + tgt.classList.join '.'
-      
-      entry = @eventLog[@logIdxPos]
+      name = e.type ? e
+      entry = @eventLog[@logIndex]
       if entry.name is name then entry.count++
       else
         if name of ignoredCommands then return
-        @logIdxPos = (@logIdxPos+1) & logSizeMask
-        entry = @eventLog[@logIdxPos]
+        @logIndex = (@logIndex+1) & logSizeMask
+        entry = @eventLog[@logIndex]
         entry.name  = name
         entry.count = 1
         entry.time = Date.now()
@@ -59,13 +50,13 @@ class CommandLogger
     if cmdArgInfo then lastTime = cmdArgInfo.time
     else
       for ofs in [1..logSize]
-        {name, time} = @eventLog[(@logIdxPos + ofs) & logSizeMask]
+        {name, time} = @eventLog[(@logIndex + ofs) & logSizeMask]
         lastTime = time
         if name is 'bug-report:open' then break
     for ofs in [1..logSize]
-      {name, count, time} = @eventLog[(@logIdxPos + ofs) & logSizeMask]
+      {name, count, time} = @eventLog[(@logIndex + ofs) & logSizeMask]
       if time > lastTime then break
-      if name is 'empty' or lastTime - time >= 10*60*1000 then continue
+      if not name or lastTime - time >= 10*60*1000 then continue
       text += switch
         when count < 10 then '  '
         when count < 100 then ' '

@@ -24,12 +24,12 @@ class BugReport
   # Public: Activates the package.
   activate: ->
     @commandLogger = new CommandLogger
-    atom.workspaceView.command 'bug-report:open', (e, @cmdArgInfo) =>
-      if @cmdArgInfo and not @cmdArgInfo.body
-        @cmdArgInfo = 
+    atom.workspaceView.command 'bug-report:open', (e, @externalData) =>
+      if @externalData and not @externalData.body
+        @externalData = 
           title: 'Error'
           time:   Date.now()
-          body:   @cmdArgInfo
+          body:   @externalData
       @open()
 
   # Public: Opens the bug report.
@@ -56,7 +56,7 @@ class BugReport
         **Actual:** [Enter actual behavior here]
 
         ## Command History:
-        #{@commandLogger.getText(@cmdArgInfo)}
+        #{@commandLogger.getText(@externalData)}
 
         ![Screenshot or GIF movie](url)
 
@@ -78,10 +78,10 @@ class BugReport
   #
   # Returns a {String} containing the entire error information section.
   errorSection: ->
-    if @cmdArgInfo
+    if @externalData
       """
       ---
-      #{@cmdArgInfo.body}
+      #{@externalData.body}
       """
     else
       ''
