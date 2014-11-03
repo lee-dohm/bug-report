@@ -23,50 +23,52 @@ class CommandLogger
   constructor: ->
     @initLog()
     
-    addEventToLog = (e) =>
-      name = e.type ? e
+    atom.commands.onWillDispatch (event) =>
+      {type: name, target: source} = event
       entry = @eventLog[@logIndex]
       if entry.name is name then entry.count++
       else
         if name of ignoredCommands then return
         @logIndex = (@logIndex+1) & logSizeMask
         entry = @eventLog[@logIndex]
-        entry.name  = name
-        entry.count = 1
-        entry.time = Date.now()
+        entry.name   = name
+        entry.source = source
+        entry.count  = 1
+        entry.time   = Date.now()
       
-    trigger = $.fn.trigger
-    @originalTrigger = trigger
-    $.fn.trigger = (e) ->
-      addEventToLog e
-      trigger.apply(this, arguments)
-
-    @keymapMatchedSubscription = atom.keymap.on 'matched', ({binding}) =>
-      addEventToLog binding.command
-      
-  getText: (cmdArgInfo) ->
+  getText: (externalData) ->
     text    = '```\n'
     dateFmt = 'm:ss.S'
-    if cmdArgInfo then lastTime = cmdArgInfo.time
+    
+    if externalData then lastTime = externalData.time
     else
       for ofs in [1..logSize]
         {name, time} = @eventLog[(@logIndex + ofs) & logSizeMask]
         lastTime = time
         if name is 'bug-report:open' then break
+    
     for ofs in [1..logSize]
-      {name, count, time} = @eventLog[(@logIndex + ofs) & logSizeMask]
+      {name, source, count, time} = @eventLog[(@logIndex + ofs) & logSizeMask]
       if time > lastTime then break
       if not name or lastTime - time >= 10*60*1000 then continue
+      
+      {nodeName, id, classList} = source
+      srcText = nodeName.toLowerCase()
+      if id then srcText += '#' + id
+      if classList?.length
+        # wtf -  classList.join is undefined!
+        for klass in classList then srcText += '.' + klass
+      
       text += switch
         when count < 10 then '  '
         when count < 100 then ' '
       text += (if count > 1 then count + 'x ' else '   ') +
         '-' + moment(lastTime - time).format(dateFmt) +
-        ' ' + name + '\n'
+        ' ' + name + ' (' + srcText + ')\n'
       if name is 'bug-report:open' then break
-    if cmdArgInfo
+    if externalData
       text += '     -' + moment(0).format(dateFmt) + 
-              ' ' + cmdArgInfo.title + '\n'
+              ' ' + externalData.title + '\n'
     @initLog()
     text + '```'
 
