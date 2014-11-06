@@ -29,10 +29,9 @@ class BugReport
   open: (errorInfo) ->
     atom.workspace.open('bug-report.md').then (editor) =>
       editor.setText """
-        
-        [Enter description here]
+      [Enter description here]
 
-        ![Screenshot or GIF movie](url)
+      ![Screenshot or GIF movie](url)
 
       #{@errorSection(errorInfo)}
 
@@ -46,7 +45,7 @@ class BugReport
       **Actual:** [Enter actual behavior here]
 
       ## Versions
-        
+
       * **Atom:**       #{atom.getVersion()}
       * **Atom-Shell:** #{@atomShellVersionText()}
       * **OS:**         #{@osMarketingVersion()}
@@ -56,8 +55,8 @@ class BugReport
       ---
 
       <small>This report was created in and posted from the Atom editor using the package `bug-report`#{@packageVersionText()}.</small>
-
       """
+
       new PanelView editor
 
   # Private: Get atom-shell version number text.
