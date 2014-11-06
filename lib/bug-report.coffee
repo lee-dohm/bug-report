@@ -29,30 +29,33 @@ class BugReport
   open: (errorInfo) ->
     atom.workspace.open('bug-report.md').then (editor) =>
       editor.setText """
+        
         [Enter description here]
-
-        * **Atom Version:**       #{atom.getVersion()}
-        * **Atom-Shell Version:** #{@atomShellVersionText()}
-        * **OS Version:**         #{@osMarketingVersion()}
-        * **Misc Versions**
-        #{@extendedVersion()}
-
-        #{@errorSection(errorInfo)}
-
-        ## Repro Steps
-
-        1. [First Step]
-        2. [Second Step]
-        3. [and so on...]
-
-        **Expected:** [Enter expected behavior here]
-        **Actual:** [Enter actual behavior here]
 
         ![Screenshot or GIF movie](url)
 
-        ---
+      #{@errorSection(errorInfo)}
 
-        <small>This report was created in and posted from the Atom editor using the package `bug-report`#{@packageVersionText()}.</small>
+      ## Repro Steps
+
+      1. [First Step]
+      2. [Second Step]
+      3. [and so on...]
+
+      **Expected:** [Enter expected behavior here]
+      **Actual:** [Enter actual behavior here]
+
+      ## Versions
+        
+      * **Atom:**       #{atom.getVersion()}
+      * **Atom-Shell:** #{@atomShellVersionText()}
+      * **OS:**         #{@osMarketingVersion()}
+      * **Misc**
+      #{@extendedVersion()}
+
+      ---
+
+      <small>This report was created in and posted from the Atom editor using the package `bug-report`#{@packageVersionText()}.</small>
 
       """
       new PanelView editor
@@ -83,10 +86,10 @@ class BugReport
   extendedVersion: ->
     cmd = path.join(atom.packages.resourcePath, 'apm/node_modules/atom-package-manager/bin/apm')
     cmd += '.cmd' if os.platform() is 'win32'
-    '    * ' + spawnSync(cmd, ['--version']).stdout.toString()
+    '  * ' + spawnSync(cmd, ['--version']).stdout.toString()
                                 .replace(/\[\d\dm/g, '')
                                 .replace(/\n\s*$/, '')
-                                .replace(/\n/g, '\n    * ')
+                                .replace(/\n/g, '\n  * ')
 
   # Private: Generates the marketing version text for OS X systems.
   #

@@ -21,32 +21,37 @@ Execute the `bug-report:open` command (`ctrl-alt-shift-B` by default) and a new 
 Sample template:
 
 ```markdown
-[Enter description here]
+### Description
+  
+  [Enter description here]
 
-* **Atom Version:**       0.142.0-427a32c
-* **Atom-Shell Version:** 0.18.2
-* **OS Version:**         Mac OS X 10.10
-* **Misc Versions**
+  ![Screenshot or GIF movie](url)
+
+### Repro Steps
+
+  1. [First Step]
+  2. [Second Step]
+  3. [and so on...]
+
+  **Expected:** [Enter expected behavior here]
+  **Actual:** [Enter actual behavior here]
+
+### Versions
+  
+  * **Atom:**       0.141.0
+  * **Atom-Shell:** 0.18.2
+  * **OS:**         Microsoft Windows 8 Pro with Media Center
+  * **Misc**
     * apm  0.109.0
     * npm  1.4.4
     * node 0.10.32
-    * python 2.7.6
-    * git 2.1.2
-
-## Repro Steps
-
-1. [First Step]
-2. [Second Step]
-3. [and so on...]
-
-**Expected:** [Enter expected behavior here]
-**Actual:** [Enter actual behavior here]
-
-![Screenshot or GIF movie](url)
+    * python 2.7.5
+    * git 1.7.11.msysgit.1
+    * visual studio 2013
 
 ---
 
-<small>This report was created in and posted from the Atom editor using the package `bug-report` version 0.3.0.</small>
+  <small>This report was created in and posted from the Atom editor using the package `bug-report` version 0.4.0.</small>
 ```
 
 ### Automatic Posting to GitHub
