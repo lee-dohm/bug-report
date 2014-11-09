@@ -13,3 +13,10 @@ describe 'BugReport', ->
       * python 2.7.6
       * git 2.1.2
       """
+
+  describe 'atomShellVersionText', ->
+    it 'returns the atom-shell version number', ->
+      expect(BugReport.atomShellVersionText(atomShellVersion: '1.2.3')).toBe '1.2.3'
+
+    it 'returns the empty string if there is no atom-shell version info', ->
+      expect(BugReport.atomShellVersionText({})).toBe ''

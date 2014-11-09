@@ -67,26 +67,7 @@ class BugReport
       <small>This report was created in and posted from the Atom editor using the package `bug-report`#{@packageVersionText()}.</small>
       """
 
-      new PanelView editor
-
-  # Private: Get atom-shell version number text.
-  atomShellVersionText: ->
-    try
-      JSON.parse(fs.readFileSync(path.join(atom.getLoadSettings().resourcePath, 'package.json'))).atomShellVersion
-    catch e
-      ""
-
-  # Private: Creates the error information section if any was supplied.
-  #
-  # Returns a {String} containing the entire error information section.
-  errorSection: ->
-    if @externalData
-      """
-      ---
-      #{@externalData.body}
-      """
-    else
-      ''
+      new PanelView(editor)
 
   # Private: Gets the `apm --version` information.
   #
@@ -102,6 +83,33 @@ class BugReport
   apmVersionText: (info = @apmVersionInfo())->
     text = @stripAnsi(info.trim())
     ("    * #{line}" for line in text.split("\n")).join("\n")
+
+  # Private: Extracts the Atom `package.json` information.
+  #
+  # Returns an {Object} containing the package information.
+  atomPackageInfo: ->
+    try
+      JSON.parse(fs.readFileSync(path.join(atom.getLoadSettings().resourcePath, 'package.json')))
+    catch e
+      {}
+
+  # Private: Get atom-shell version number text.
+  #
+  # Returns a {String} containing the atom-shell version number.
+  atomShellVersionText: (info = @atomPackageInfo())->
+    info.atomShellVersion ? ''
+
+  # Private: Creates the error information section if any was supplied.
+  #
+  # Returns a {String} containing the entire error information section.
+  errorSection: ->
+    if @externalData
+      """
+      ---
+      #{@externalData.body}
+      """
+    else
+      ''
 
   # Private: Generates the marketing version text for OS X systems.
   #
