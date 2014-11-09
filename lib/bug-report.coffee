@@ -23,14 +23,14 @@ class BugReport
 
   # Public: Activates the package.
   activate: ->
-
     @commandLogger = new CommandLogger
     atom.workspaceView.command 'bug-report:open', (e, @externalData) =>
       if @externalData and not @externalData.body
-        @externalData = 
+        @externalData =
           title: 'Error'
           time:   Date.now()
           body:   @externalData
+
       @open()
 
   # Public: Opens the bug report.
