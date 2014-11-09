@@ -52,10 +52,12 @@ class BugReport
       **Expected:** [Enter expected behavior here]
       **Actual:** [Enter actual behavior here]
 
-      ## Command History:
+      ## Command History
+
       #{@commandLogger.getText(@externalData)}
 
       ## Versions
+      
       * **Atom:**       #{atom.getVersion()}
       * **Atom-Shell:** #{@atomShellVersionText()}
       * **OS:**         #{@osMarketingVersion()}
