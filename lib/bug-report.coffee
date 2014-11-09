@@ -64,7 +64,7 @@ class BugReport
 
       ---
 
-      <small>This report was created in and posted from the Atom editor using the package `bug-report`#{@packageVersionText()}.</small>
+      <small>This report was created in and posted from the Atom editor using the package #{@packageVersionText()}.</small>
       """
 
       new PanelView(editor)
@@ -138,12 +138,22 @@ class BugReport
       when 'win32' then @winMarketingVersion()
       else "#{os.platform()} #{os.release()}"
 
-  # Private: Get bug-report version number text.
-  packageVersionText: ->
+  # Private: Get the package information.
+  #
+  # Returns the package metadata.
+  packageVersionInfo: ->
     try
-      ' version ' + JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'))).version
+      JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json')))
     catch e
-      ""
+      {}
+
+  # Private: Get bug-report version number text.
+  #
+  # Returns the package name and version.
+  packageVersionText: (info = @packageVersionInfo()) ->
+    text = "`#{info.name ? 'bug-report'}`"
+    text += " v#{info.version}" if info.version
+    text
 
   # Private: Strips ANSI escape codes from the given text.
   #

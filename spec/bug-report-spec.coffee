@@ -34,3 +34,13 @@ describe 'BugReport', ->
 
     it 'returns Unknown OS X version when no ProductVersion is supplied', ->
       expect(BugReport.macVersionText(ProductName: 'foo')).toBe 'Unknown OS X version'
+
+  describe 'packageVersionText', ->
+    it 'returns the package name and version', ->
+      expect(BugReport.packageVersionText(name: 'foo', version: 'bar')).toBe '`foo` vbar'
+
+    it 'returns `bug-report` and version when no name is given', ->
+      expect(BugReport.packageVersionText(version: 'bar')).toBe '`bug-report` vbar'
+
+    it 'returns the package name when there is no version', ->
+      expect(BugReport.packageVersionText(name: 'foo')).toBe '`foo`'
