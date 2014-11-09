@@ -34,7 +34,7 @@ class BugReport
       @open()
 
   # Public: Opens the bug report.
-  open: (errorInfo) ->
+  open: ->
     atom.workspace.open('bug-report.md').then (editor) =>
       editor.setText """
       [Enter description here]
@@ -60,7 +60,7 @@ class BugReport
       * **Atom-Shell:** #{@atomShellVersionText()}
       * **OS:**         #{@osMarketingVersion()}
       * **Misc**
-      #{@extendedVersion()}
+      #{@apmVersionText()}
 
       ---
 
@@ -88,16 +88,20 @@ class BugReport
     else
       ''
 
-  # Private: Generates the apm --version text on any platform
+  # Private: Gets the `apm --version` information.
   #
-  # Returns a {String} containing the extended version info.
-  extendedVersion: ->
+  # Returns the output of `apm --version`.
+  apmVersionInfo: ->
     cmd = path.join(atom.packages.resourcePath, 'apm/node_modules/atom-package-manager/bin/apm')
     cmd += '.cmd' if os.platform() is 'win32'
-    '  * ' + spawnSync(cmd, ['--version']).stdout.toString()
-                                .replace(/\[\d\dm/g, '')
-                                .replace(/\n\s*$/, '')
-                                .replace(/\n/g, '\n  * ')
+    spawnSync(cmd, ['--version']).stdout.toString()
+
+  # Private: Generates the apm version text.
+  #
+  # Returns a {String} containing the apm version info.
+  apmVersionText: (info = @apmVersionInfo())->
+    text = @stripAnsi(info.trim())
+    ("    * #{line}" for line in text.split("\n")).join("\n")
 
   # Private: Generates the marketing version text for OS X systems.
   #
@@ -122,6 +126,12 @@ class BugReport
       ' version ' + JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'))).version
     catch e
       ""
+
+  # Private: Strips ANSI escape codes from the given text.
+  #
+  # Returns the text without the ANSI gobbledygook.
+  stripAnsi: (text) ->
+    text.replace(/\x1b[^m]*m/g, '')
 
   # Private: Generates the marketing version text for Windows systems.
   #
