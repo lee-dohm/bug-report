@@ -57,7 +57,7 @@ class BugReport
       #{@commandLogger.getText(@externalData)}
 
       ## Versions
-      
+
       * **Atom:**       #{atom.getVersion()}
       * **Atom-Shell:** #{@atomShellVersionText()}
       * **OS:**         #{@osMarketingVersion()}
