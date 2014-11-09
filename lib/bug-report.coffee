@@ -4,6 +4,7 @@ path = require('path')
 plist = require('plist')
 spawnSync = require('child_process').spawnSync
 PanelView = require('./panel-view')
+CommandLogger = require('./command-logger')
 
 defaultTokenPath = if process.platform is 'win32'
                      path.join(process.env['USERPROFILE'], 'bug-report.token')
@@ -22,8 +23,15 @@ class BugReport
 
   # Public: Activates the package.
   activate: ->
-    atom.workspaceView.command 'bug-report:open', (e, errorInfo) =>
-      @open(errorInfo)
+
+    @commandLogger = new CommandLogger
+    atom.workspaceView.command 'bug-report:open', (e, @externalData) =>
+      if @externalData and not @externalData.body
+        @externalData = 
+          title: 'Error'
+          time:   Date.now()
+          body:   @externalData
+      @open()
 
   # Public: Opens the bug report.
   open: (errorInfo) ->
@@ -33,7 +41,7 @@ class BugReport
 
       ![Screenshot or GIF movie](url)
 
-      #{@errorSection(errorInfo)}
+      #{@errorSection()}
 
       ## Repro Steps
 
@@ -44,8 +52,10 @@ class BugReport
       **Expected:** [Enter expected behavior here]
       **Actual:** [Enter actual behavior here]
 
-      ## Versions
+      ## Command History:
+      #{@commandLogger.getText(@externalData)}
 
+      ## Versions
       * **Atom:**       #{atom.getVersion()}
       * **Atom-Shell:** #{@atomShellVersionText()}
       * **OS:**         #{@osMarketingVersion()}
@@ -69,12 +79,11 @@ class BugReport
   # Private: Creates the error information section if any was supplied.
   #
   # Returns a {String} containing the entire error information section.
-  errorSection: (errorInfo) ->
-    if errorInfo
+  errorSection: ->
+    if @externalData
       """
-      ## Error Information
-
-      #{errorInfo}
+      ---
+      #{@externalData.body}
       """
     else
       ''

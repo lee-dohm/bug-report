@@ -49,6 +49,14 @@ Sample template:
     * git 1.7.11.msysgit.1
     * visual studio 2013
 
+## Command History:
+     -0:03.1 ready
+     -0:03.0 focus
+     -0:02.8 editor:display-updated
+     -0:02.6 pane:active-item-modified-status-changed
+  3x -0:02.5 editor:display-updated
+     -0:00.0 bug-report:open
+     
 ---
 
 <small>This report was created in and posted from the Atom editor using the package `bug-report` version 0.4.0.</small>
