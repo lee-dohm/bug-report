@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## **v0.5.0** &mdash; *Released: 8 November 2014*
+
+* [PR #25](https://github.com/lee-dohm/bug-report/pull/25) by [@mark-hahn](https://github.com/mark-hahn)
+    * [#16](https://github.com/lee-dohm/bug-report/issues/16) &mdash; Add automated repro steps
+    * [#27](https://github.com/lee-dohm/bug-report/issues/27) &mdash; Add timestamp in repro steps
+
 ## **v0.4.1** &mdash; *Released: 2 November 2014*
 
 * Fixed passing of error info to report
