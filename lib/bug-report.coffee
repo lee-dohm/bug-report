@@ -111,20 +111,30 @@ class BugReport
     else
       ''
 
+  # Private: Gets the OS X version information.
+  #
+  # Returns an {Object} containing the version info.
+  macVersionInfo: ->
+    try
+      text = fs.readFileSync('/System/Library/CoreServices/SystemVersion.plist', 'utf8')
+      plist.parse(text)
+    catch e
+      {}
+
   # Private: Generates the marketing version text for OS X systems.
   #
   # Returns a {String} containing the version text.
-  macMarketingVersion: ->
-    text = fs.readFileSync('/System/Library/CoreServices/SystemVersion.plist', 'utf8')
-    versionInfo = plist.parse(text)
-    "#{versionInfo['ProductName']} #{versionInfo['ProductVersion']}"
+  macVersionText: (info = @macVersionInfo()) ->
+    return 'Unknown OS X version' unless info.ProductName and info.ProductVersion
+
+    "#{info.ProductName} #{info.ProductVersion}"
 
   # Private: Generates the marketing version text for the OS.
   #
   # Returns a {String} containing the version text.
   osMarketingVersion: ->
     switch os.platform()
-      when 'darwin' then @macMarketingVersion()
+      when 'darwin' then @macVersionText()
       when 'win32' then @winMarketingVersion()
       else "#{os.platform()} #{os.release()}"
 

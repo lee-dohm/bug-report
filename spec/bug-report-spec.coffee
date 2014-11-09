@@ -20,3 +20,17 @@ describe 'BugReport', ->
 
     it 'returns the empty string if there is no atom-shell version info', ->
       expect(BugReport.atomShellVersionText({})).toBe ''
+
+  describe 'macVersionText', ->
+    it 'returns the ProductName and ProductVersion', ->
+      info =
+        ProductName: 'foo'
+        ProductVersion: 'bar'
+
+      expect(BugReport.macVersionText(info)).toBe 'foo bar'
+
+    it 'returns Unknown OS X version when no ProductName is supplied', ->
+      expect(BugReport.macVersionText(ProductVersion: 'bar')).toBe 'Unknown OS X version'
+
+    it 'returns Unknown OS X version when no ProductVersion is supplied', ->
+      expect(BugReport.macVersionText(ProductName: 'foo')).toBe 'Unknown OS X version'
