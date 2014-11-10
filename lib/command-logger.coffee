@@ -12,22 +12,19 @@ ignoredCommands =
 module.exports =
 # Handles logging all of the Atom commands for the automatic repro steps feature.
 class CommandLogger
-  initLog: ->
-    @logIndex = 0
-    @eventLog = for i in [0...logSize]
-      name: null
-      count: 0
-      time: null
-
+  # Public: Creates a new logger.
   constructor: ->
     @initLog()
 
     atom.commands.onWillDispatch (event) =>
       {type: name, target: source} = event
       entry = @eventLog[@logIndex]
-      if entry.name is name then entry.count++
+
+      if entry.name is name
+        entry.count++
       else
-        if name of ignoredCommands then return
+        return if name of ignoredCommands
+
         @logIndex = (@logIndex+1) & logSizeMask
         entry = @eventLog[@logIndex]
         entry.name   = name
@@ -76,6 +73,14 @@ class CommandLogger
   # Returns the event {Object}.
   latestEvent: ->
     @eventLog[@logIndex]
+
+  # Private: Initializes the log structure for speed.
+  initLog: ->
+    @logIndex = 0
+    @eventLog = for i in [0...logSize]
+      name: null
+      count: 0
+      time: null
 
   destroy: ->
     if @originalTrigger? then $.fn.trigger = @originalTrigger
