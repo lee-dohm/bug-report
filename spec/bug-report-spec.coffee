@@ -1,8 +1,24 @@
+{WorkspaceView} = require 'atom'
+
 BugReport = require '../lib/bug-report'
 
 helper = require './spec-helper'
 
 describe 'BugReport', ->
+  beforeEach ->
+    atom.workspaceView = new WorkspaceView
+    atom.workspace = atom.workspaceView.getModel()
+
+    waitsForPromise ->
+      atom.packages.activatePackage('bug-report')
+
+  describe 'activation', ->
+    it 'creates the open command', ->
+      commands = atom.commands.findCommands(target: atom.workspaceView)
+      found = true for command in commands when command.name is 'bug-report:open'
+
+      expect(found).toBeTruthy()
+
   describe 'apmVersionText', ->
     it 'returns what is expected', ->
       versionText = helper.getFixture('apm-version.txt')
