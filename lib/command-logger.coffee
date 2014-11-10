@@ -10,6 +10,7 @@ ignoredCommands =
   'hidden.bs.tooltip': yes
 
 module.exports =
+# Handles logging all of the Atom commands for the automatic repro steps feature.
 class CommandLogger
   initLog: ->
     @logIndex = 0
@@ -69,6 +70,12 @@ class CommandLogger
               ' ' + externalData.title + '\n'
     @initLog()
     text + '```'
+
+  # Public: Gets the latest event from the log.
+  #
+  # Returns the event {Object}.
+  latestEvent: ->
+    @eventLog[@logIndex]
 
   destroy: ->
     if @originalTrigger? then $.fn.trigger = @originalTrigger
