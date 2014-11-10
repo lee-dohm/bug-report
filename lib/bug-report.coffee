@@ -39,6 +39,7 @@ class BugReport
   # Public: Deactivates the package.
   deactivate: ->
     @command.dispose()
+    @commandLogger = null
 
   # Public: Opens the bug report.
   open: ->

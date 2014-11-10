@@ -19,6 +19,9 @@ describe 'BugReport', ->
 
       expect(found).toBeTruthy()
 
+    it 'creates the command logger', ->
+      expect(BugReport.commandLogger).not.toBeNull()
+
   describe 'deactivation', ->
     beforeEach ->
       atom.packages.deactivatePackage('bug-report')
@@ -28,6 +31,9 @@ describe 'BugReport', ->
       found = true for command in commands when command.name is 'bug-report:open'
 
       expect(found).toBeFalsy()
+
+    it 'destroys the command logger', ->
+      expect(BugReport.commandLogger).toBeNull()
 
   describe 'apmVersionText', ->
     it 'returns what is expected', ->
