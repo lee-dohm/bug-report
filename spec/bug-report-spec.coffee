@@ -14,10 +14,20 @@ describe 'BugReport', ->
 
   describe 'activation', ->
     it 'creates the open command', ->
-      commands = atom.commands.findCommands(target: atom.workspaceView)
+      commands = atom.commands.findCommands(target: atom.workspaceView.element)
       found = true for command in commands when command.name is 'bug-report:open'
 
       expect(found).toBeTruthy()
+
+  describe 'deactivation', ->
+    beforeEach ->
+      atom.packages.deactivatePackage('bug-report')
+
+    it 'removes the open command', ->
+      commands = atom.commands.findCommands(target: atom.workspaceView.element)
+      found = true for command in commands when command.name is 'bug-report:open'
+
+      expect(found).toBeFalsy()
 
   describe 'apmVersionText', ->
     it 'returns what is expected', ->
