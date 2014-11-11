@@ -32,6 +32,11 @@ class CommandLogger
         entry.count  = 1
         entry.time   = Date.now()
 
+  # Public: Formats the command log for the bug report.
+  #
+  # externalData - Other information to include in the log.
+  #
+  # Returns a {String} containing the Markdown for the report.
   getText: (externalData) ->
     text    = '```\n'
     dateFmt = 'm:ss.S'
@@ -82,6 +87,7 @@ class CommandLogger
       count: 0
       time: null
 
+  # Unused?
   destroy: ->
     if @originalTrigger? then $.fn.trigger = @originalTrigger
     @keymapMatchedSubscription?.off()
