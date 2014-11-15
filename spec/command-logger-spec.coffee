@@ -141,3 +141,11 @@ describe 'CommandLogger', ->
              -0:00.0 bummer
         ```
       """
+
+    it 'does not report commands that have no name', ->
+      dispatch('')
+
+      expect(logger.getText()).toBe """
+        ```
+        ```
+      """

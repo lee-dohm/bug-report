@@ -26,38 +26,34 @@ class CommandLogger
   #
   # Returns a {String} containing the Markdown for the report.
   getText: (externalData) ->
-    text    = '```\n'
     dateFmt = 'm:ss.S'
+    text    = '```\n'
 
-    if externalData then lastTime = externalData.time
+    if externalData
+      lastTime = externalData.time
     else
-      for ofs in [1..@logSize]
-        {name, time} = @eventLog[(@logIndex + ofs) & logSizeMask]
+      for offset in [1..@logSize]
+        {name, time} = @eventLog[(@logIndex + offset) % @logSize]
         lastTime = time
-        if name is 'bug-report:open' then break
+        break if name is 'bug-report:open'
 
-    for ofs in [1..@logSize]
-      {name, source, count, time} = @eventLog[(@logIndex + ofs) & logSizeMask]
-      if time > lastTime then break
-      if not name or lastTime - time >= 10*60*1000 then continue
+    for offset in [1..@logSize]
+      {name, source, count, time} = @eventLog[(@logIndex + offset) % @logSize]
+      break if time > lastTime
+      continue if not name or lastTime - time >= 10*60*1000
 
-      {nodeName, id, classList} = source
-      srcText = nodeName.toLowerCase()
-      if id then srcText += '#' + id
-      if classList?.length
-        # wtf -  classList.join is undefined!
-        for klass in classList then srcText += '.' + klass
+      srcText = @formatSource(source)
+      countText = @formatCount(count)
 
-      text += switch
-        when count < 10 then '  '
-        when count < 100 then ' '
-      text += (if count > 1 then count + 'x ' else '   ') +
+      text += countText +
         '-' + moment(lastTime - time).format(dateFmt) +
         ' ' + name + ' (' + srcText + ')\n'
       if name is 'bug-report:open' then break
+
     if externalData
       text += '     -' + moment(0).format(dateFmt) +
               ' ' + externalData.title + '\n'
+
     @initLog()
     text + '```'
 
@@ -85,6 +81,27 @@ class CommandLogger
       entry.source = source
       entry.count  = 1
       entry.time   = Date.now()
+
+  # Private: Format the command count for reporting.
+  #
+  # Returns the {String} format of the command count.
+  formatCount: (count) ->
+    switch
+      when count < 2 then '     '
+      when count < 10 then "  #{count}x "
+      when count < 100 then " #{count}x "
+
+  # Private: Format the command source for reporting.
+  #
+  # Returns the {String} format of the command source.
+  formatSource: (source) ->
+    {nodeName, id, classList} = source
+    nodeText = nodeName.toLowerCase()
+    idText = if id then "##{id}" else ''
+    classText = ''
+    classText += ".#{klass}" for klass in classList if classList
+
+    "#{nodeText}#{idText}#{classText}"
 
   # Private: Initializes the log structure for speed.
   initLog: ->
