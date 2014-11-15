@@ -15,22 +15,8 @@ class CommandLogger
   # Public: Creates a new logger.
   constructor: ->
     @initLog()
-
     atom.commands.onWillDispatch (event) =>
-      {type: name, target: source} = event
-      entry = @eventLog[@logIndex]
-
-      if entry.name is name
-        entry.count++
-      else
-        return if name of ignoredCommands
-
-        @logIndex = (@logIndex+1) & logSizeMask
-        entry = @eventLog[@logIndex]
-        entry.name   = name
-        entry.source = source
-        entry.count  = 1
-        entry.time   = Date.now()
+      @logEvent(event)
 
   # Public: Formats the command log for the bug report.
   #
@@ -78,6 +64,25 @@ class CommandLogger
   # Returns the event {Object}.
   latestEvent: ->
     @eventLog[@logIndex]
+
+  # Public: Logs the command event.
+  #
+  # event - Command event to be logged.
+  logEvent: (event) ->
+    {type: name, target: source} = event
+    return if name of ignoredCommands
+
+    entry = @eventLog[@logIndex]
+
+    if entry.name is name
+      entry.count++
+    else
+      @logIndex = (@logIndex + 1) % logSize
+      entry = @eventLog[@logIndex]
+      entry.name   = name
+      entry.source = source
+      entry.count  = 1
+      entry.time   = Date.now()
 
   # Private: Initializes the log structure for speed.
   initLog: ->
