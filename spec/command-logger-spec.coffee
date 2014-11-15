@@ -33,3 +33,8 @@ describe 'CommandLogger', ->
       atom.commands.dispatch(atom.workspaceView.element, 'show.bs.tooltip')
 
       expect(logger.latestEvent().name).not.toBe 'show.bs.tooltip'
+
+    it 'only logs sixteen commands max', ->
+      atom.commands.dispatch(atom.workspaceView.element, char) for char in ['a'..'z']
+
+      expect(logger.eventLog.length).toBe 16
