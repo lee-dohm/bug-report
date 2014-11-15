@@ -1,7 +1,6 @@
 {$}    = require 'atom'
 moment = require 'moment'
 
-logSize = 16
 logSizeMask = 0xf
 ignoredCommands =
   'show.bs.tooltip':   yes
@@ -12,6 +11,9 @@ ignoredCommands =
 module.exports =
 # Handles logging all of the Atom commands for the automatic repro steps feature.
 class CommandLogger
+  # Public: Maximum size of the log.
+  logSize: 16
+
   # Public: Creates a new logger.
   constructor: ->
     @initLog()
@@ -29,12 +31,12 @@ class CommandLogger
 
     if externalData then lastTime = externalData.time
     else
-      for ofs in [1..logSize]
+      for ofs in [1..@logSize]
         {name, time} = @eventLog[(@logIndex + ofs) & logSizeMask]
         lastTime = time
         if name is 'bug-report:open' then break
 
-    for ofs in [1..logSize]
+    for ofs in [1..@logSize]
       {name, source, count, time} = @eventLog[(@logIndex + ofs) & logSizeMask]
       if time > lastTime then break
       if not name or lastTime - time >= 10*60*1000 then continue
@@ -77,7 +79,7 @@ class CommandLogger
     if entry.name is name
       entry.count++
     else
-      @logIndex = (@logIndex + 1) % logSize
+      @logIndex = (@logIndex + 1) % @logSize
       entry = @eventLog[@logIndex]
       entry.name   = name
       entry.source = source
@@ -87,7 +89,7 @@ class CommandLogger
   # Private: Initializes the log structure for speed.
   initLog: ->
     @logIndex = 0
-    @eventLog = for i in [0...logSize]
+    @eventLog = for i in [0...@logSize]
       name: null
       count: 0
       time: null

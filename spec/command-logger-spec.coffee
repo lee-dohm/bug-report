@@ -37,10 +37,10 @@ describe 'CommandLogger', ->
 
       expect(logger.latestEvent().name).not.toBe 'show.bs.tooltip'
 
-    it 'only logs sixteen commands max', ->
+    it 'only logs up to `logSize` commands', ->
       dispatch(char) for char in ['a'..'z']
 
-      expect(logger.eventLog.length).toBe 16
+      expect(logger.eventLog.length).toBe(logger.logSize)
 
   describe 'formatting of text log', ->
     it 'does not output empty log items', ->
@@ -80,3 +80,13 @@ describe 'CommandLogger', ->
           2x -0:00.0 foo:bar (atom-workspace.workspace.scrollbars-visible-when-scrolling)
         ```
       """
+
+    it 'empties the log after `getText()` is called', ->
+      dispatch('foo:bar')
+      logger.getText()
+
+      for i in [0...logger.logSize]
+        event = logger.eventLog[i]
+        expect(event.name).toBeNull()
+        expect(event.count).toBe 0
+        expect(event.time).toBeNull()
