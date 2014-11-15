@@ -2,6 +2,8 @@
 
 CommandLogger = require '../lib/command-logger'
 
+helper = require './spec-helper'
+
 describe 'CommandLogger', ->
   [logger] = []
 
@@ -90,3 +92,52 @@ describe 'CommandLogger', ->
         expect(event.name).toBeNull()
         expect(event.count).toBe 0
         expect(event.time).toBeNull()
+
+    it 'does not report anything after bug-report:open', ->
+      dispatch('foo:bar')
+      dispatch('bug-report:open')
+      dispatch('foo:baz')
+
+      expect(logger.getText()).toBe """
+        ```
+             -0:00.0 foo:bar (atom-workspace.workspace.scrollbars-visible-when-scrolling)
+             -0:00.0 bug-report:open (atom-workspace.workspace.scrollbars-visible-when-scrolling)
+        ```
+      """
+
+    it 'logs the external data event as the last event', ->
+      dispatch('foo:bar')
+      event =
+        time: Date.now()
+        title: 'bummer'
+
+      expect(logger.getText(event)).toBe """
+        ```
+             -0:00.0 foo:bar (atom-workspace.workspace.scrollbars-visible-when-scrolling)
+             -0:00.0 bummer
+        ```
+      """
+
+    it 'does not report anything after the external data event', ->
+      event =
+        time: Date.now() - helper.seconds(10)
+        title: 'bummer'
+      dispatch('foo:bar')
+
+      expect(logger.getText(event)).toBe """
+        ```
+             -0:00.0 bummer
+        ```
+      """
+
+    it 'does not report anything older than ten minutes', ->
+      dispatch('foo:bar')
+      event =
+        time: Date.now() + helper.minutes(11)
+        title: 'bummer'
+
+      expect(logger.getText(event)).toBe """
+        ```
+             -0:00.0 bummer
+        ```
+      """
