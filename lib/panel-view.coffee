@@ -98,14 +98,14 @@ class PanelView extends View
     @unsubscribe()
     @detach()
 
-  # Private: Posts the bug report to GitHub.
+  # Public: Posts the bug report to GitHub.
   post: ->
     title = @validateTitle()
     return unless title
 
     userSlashRepo = @repoInput.val().replace(/\s/g, '')
     userSlashRepo or= 'atom/atom'
-    if not (userRepo = /^([^\/]+)\/([^\/]+)$/.exec userSlashRepo)
+    if not (userRepo = /([^:\/]+)\/([^\/]+)$/.exec userSlashRepo)
       atom.confirm
         message: 'Bug-Report Error:\n'
         detailedMessage: 'The GitHub Repo field should be of the form ' +
@@ -120,15 +120,15 @@ class PanelView extends View
     tokenPath = atom.config.get 'bug-report.tokenPath'
     if not token and saveToken
       try
-        token = fs.readFileSync tokenPath
+        token = fs.readFileSync(tokenPath).toString()
       catch e
 
     if token
       if tokenPath and saveToken
         try
-          fs.writeFileSync tokenPath, token
+          fs.writeFileSync(tokenPath, token)
         catch e
-          console.log "bug-report: error writing token to path #{tokenPath}. #{e.message}"
+          console.log "bug-report: Error writing token to path #{tokenPath}. #{e.message}"
     else
       atom.confirm
         message: 'Bug-Report Error:\n'

@@ -101,12 +101,14 @@ describe 'PanelView', ->
         panel.post()
 
         expect(atom.confirm).toHaveBeenCalled()
+        expect(postActualSpy).not.toHaveBeenCalled()
 
       it 'displays a dialog if the title consists only of whitespace', ->
         panel.titleInput.val('     ')
         panel.post()
 
         expect(atom.confirm).toHaveBeenCalled()
+        expect(postActualSpy).not.toHaveBeenCalled()
 
     describe 'repoInput', ->
       beforeEach ->
@@ -118,3 +120,103 @@ describe 'PanelView', ->
         panel.post()
 
         expect(atom.confirm).toHaveBeenCalled()
+        expect(postActualSpy).not.toHaveBeenCalled()
+
+      it 'parses user/repo input', ->
+        panel.repoInput.val('user/repo')
+        panel.tokenInput.val('foo')
+
+        panel.post()
+
+        expect(postActualSpy).toHaveBeenCalledWith('test', 'user', 'repo', 'foo')
+
+      it 'parses GitHub web URLs', ->
+        panel.repoInput.val('https://github.com/user/repo')
+        panel.tokenInput.val('foo')
+
+        panel.post()
+
+        expect(postActualSpy).toHaveBeenCalledWith('test', 'user', 'repo', 'foo')
+
+      it 'parses GitHub https repository URLs', ->
+        panel.repoInput.val('https://github.com/user/repo.git')
+        panel.tokenInput.val('foo')
+
+        panel.post()
+
+        expect(postActualSpy).toHaveBeenCalledWith('test', 'user', 'repo', 'foo')
+
+      it 'parses GitHub ssh repository URLs', ->
+        panel.repoInput.val('git@github.com:user/repo.git')
+        panel.tokenInput.val('foo')
+
+        panel.post()
+
+        expect(postActualSpy).toHaveBeenCalledWith('test', 'user', 'repo', 'foo')
+
+    describe 'tokenInput', ->
+      beforeEach ->
+        spyOn(atom, 'confirm')
+        panel.titleInput.val('test')
+        panel.repoInput.val('user/repo')
+
+      describe 'saveToken is false', ->
+        beforeEach ->
+          atom.config.set('bug-report.saveToken', false)
+
+        it 'does not save the token if it is supplied', ->
+          panel.tokenInput.val('foo')
+
+          panel.post()
+
+          expect(postActualSpy).toHaveBeenCalledWith('test', 'user', 'repo', 'foo')
+          expect(fs.existsSync(tokenPath)).toBeFalsy()
+
+        it 'does not use the stored token if one is not supplied', ->
+          fs.writeFileSync(tokenPath, 'foo')
+
+          panel.post()
+
+          expect(postActualSpy).not.toHaveBeenCalled()
+
+      describe 'saveToken is true', ->
+        beforeEach ->
+          atom.config.set('bug-report.saveToken', true)
+
+        it 'saves the token if it is supplied', ->
+          atom.config.set('bug-report.saveToken', true)
+          panel.tokenInput.val('foo')
+
+          panel.post()
+
+          expect(postActualSpy).toHaveBeenCalledWith('test', 'user', 'repo', 'foo')
+          expect(fs.readFileSync(tokenPath).toString()).toBe 'foo'
+
+        it 'saves the token if it is supplied even if a different one is already stored', ->
+          fs.writeFileSync(tokenPath, 'bar')
+          atom.config.set('bug-report.saveToken', true)
+          panel.tokenInput.val('foo')
+
+          panel.post()
+
+          expect(postActualSpy).toHaveBeenCalledWith('test', 'user', 'repo', 'foo')
+          expect(fs.readFileSync(tokenPath).toString()).toBe 'foo'
+
+        it 'uses the stored token if one is not supplied', ->
+          fs.writeFileSync(tokenPath, 'foo')
+          atom.config.set('bug-report.saveToken', true)
+
+          panel.post()
+
+          expect(postActualSpy).toHaveBeenCalledWith('test', 'user', 'repo', 'foo')
+          expect(fs.readFileSync(tokenPath).toString()).toBe 'foo'
+
+    describe 'happy path', ->
+      it 'posts', ->
+        panel.titleInput.val('test')
+        panel.repoInput.val('user/repo')
+        panel.tokenInput.val('foo')
+
+        panel.post()
+
+        expect(postActualSpy).toHaveBeenCalledWith('test', 'user', 'repo', 'foo')
