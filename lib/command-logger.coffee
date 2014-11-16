@@ -10,6 +10,8 @@ ignoredCommands =
 
 module.exports =
 # Handles logging all of the Atom commands for the automatic repro steps feature.
+#
+# It uses an array as a circular data structure to log only the most recent commands.
 class CommandLogger
   # Public: Format of time information.
   dateFmt: '-m:ss.S'
@@ -145,4 +147,5 @@ class CommandLogger
     @eventLog = for i in [0...@logSize]
       name: null
       count: 0
+      source: null
       time: null
