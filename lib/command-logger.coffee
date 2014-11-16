@@ -11,6 +11,9 @@ ignoredCommands =
 module.exports =
 # Handles logging all of the Atom commands for the automatic repro steps feature.
 class CommandLogger
+  # Public: Format of time information.
+  dateFmt: '-m:ss.S'
+
   # Public: Maximum size of the log.
   logSize: 16
 
@@ -26,36 +29,32 @@ class CommandLogger
   #
   # Returns a {String} containing the Markdown for the report.
   getText: (externalData) ->
-    dateFmt = 'm:ss.S'
-    text    = '```\n'
+    lines = []
+    lastTime = null
 
     if externalData
       lastTime = externalData.time
     else
-      for offset in [1..@logSize]
-        {name, time} = @eventLog[(@logIndex + offset) % @logSize]
-        lastTime = time
-        break if name is 'bug-report:open'
+      @eachEvent (event) =>
+        lastTime = event.time
+        event.name is 'bug-report:open'
 
-    for offset in [1..@logSize]
-      {name, source, count, time} = @eventLog[(@logIndex + offset) % @logSize]
-      break if time > lastTime
-      continue if not name or lastTime - time >= 10*60*1000
+    @eachEvent (event) =>
+      return true if event.time > lastTime
+      return false if not event.name or lastTime - event.time >= 10*60*1000
 
-      srcText = @formatSource(source)
-      countText = @formatCount(count)
+      lines.push(@formatEvent(event, lastTime))
 
-      text += countText +
-        '-' + moment(lastTime - time).format(dateFmt) +
-        ' ' + name + ' (' + srcText + ')\n'
-      if name is 'bug-report:open' then break
+      return true if event.name is 'bug-report:open'
 
     if externalData
-      text += '     -' + moment(0).format(dateFmt) +
-              ' ' + externalData.title + '\n'
+      lines.push("     #{@formatTime(0)} #{externalData.title}")
 
     @initLog()
-    text + '```'
+
+    lines.unshift('```')
+    lines.push('```')
+    lines.join("\n")
 
   # Public: Gets the latest event from the log.
   #
@@ -82,14 +81,31 @@ class CommandLogger
       entry.count  = 1
       entry.time   = Date.now()
 
+  # Private: Executes a function on each event in chronological order.
+  #
+  # The function will receive an event object and the iteration will stop if the function returns a
+  # truthy value.
+  #
+  # fn - {Function} to execute.
+  eachEvent: (fn) ->
+    for offset in [1..@logSize]
+      stop = fn(@eventLog[(@logIndex + offset) % @logSize])
+      break if stop
+
   # Private: Format the command count for reporting.
   #
   # Returns the {String} format of the command count.
   formatCount: (count) ->
     switch
-      when count < 2 then '     '
-      when count < 10 then "  #{count}x "
-      when count < 100 then " #{count}x "
+      when count < 2 then '    '
+      when count < 10 then "  #{count}x"
+      when count < 100 then " #{count}x"
+
+  # Private: Formats a command event for reporting.
+  #
+  # Returns the {String} format of the command event.
+  formatEvent: (event, lastTime) ->
+    "#{@formatCount(event.count)} #{@formatTime(lastTime - event.time)} #{event.name} #{@formatSource(event.source)}"
 
   # Private: Format the command source for reporting.
   #
@@ -101,7 +117,13 @@ class CommandLogger
     classText = ''
     classText += ".#{klass}" for klass in classList if classList
 
-    "#{nodeText}#{idText}#{classText}"
+    "(#{nodeText}#{idText}#{classText})"
+
+  # Private: Format the command time for reporting.
+  #
+  # Returns the {String} format of the command time.
+  formatTime: (time) ->
+    moment(time).format(@dateFmt)
 
   # Private: Initializes the log structure for speed.
   initLog: ->
