@@ -62,8 +62,8 @@ describe 'PanelView', ->
 
   describe 'destruction', ->
     it 'disposes of the commands', ->
-      spyOn(panel.compositeDisposable, 'dispose')
+      spyOn(panel.disposables, 'dispose')
 
       panel.destroy()
 
-      expect(panel.compositeDisposable.dispose).toHaveBeenCalled()
+      expect(panel.disposables.dispose).toHaveBeenCalled()

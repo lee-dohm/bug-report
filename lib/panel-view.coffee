@@ -58,21 +58,21 @@ class PanelView extends View
     if @tokenSaved()
       @tokenInput.attr(placeholder: 'Default: stored in file')
 
-    @compositeDisposable = new CompositeDisposable
+    @disposables = new CompositeDisposable
 
-    @compositeDisposable.add atom.commands.add '.title-input',
+    @disposables.add atom.commands.add '.title-input',
       'core:focus-next': =>
         @repoInput.focus()
       'core:confirm': =>
         @post()
 
-    @compositeDisposable.add atom.commands.add '.repo-input',
+    @disposables.add atom.commands.add '.repo-input',
       'core:focus-next': =>
         @tokenInput.focus()
       'core:confirm': =>
         @post()
 
-    @compositeDisposable.add atom.commands.add '.token-input',
+    @disposables.add atom.commands.add '.token-input',
       'core:focus-next': =>
         @titleInput.focus()
       'core:confirm': =>
@@ -83,7 +83,7 @@ class PanelView extends View
       @editor.destroy()
       @destroy()
 
-    @compositeDisposable.add atom.workspace.onDidChangeActivePaneItem (activeItem) =>
+    @disposables.add atom.workspace.onDidChangeActivePaneItem (activeItem) =>
       if activeItem in [@editor, @]
         @css(display: 'inline-block')
       else
@@ -196,6 +196,6 @@ class PanelView extends View
     saveToken and fs.existsSync(tokenPath)
 
   destroy: ->
-    @compositeDisposable.dispose()
+    @disposables.dispose()
     @unsubscribe()
     @detach()
