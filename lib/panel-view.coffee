@@ -106,16 +106,13 @@ class PanelView extends View
     [user, repo] = @validateRepo()
     return unless user and repo
 
-    token = @tokenInput.val().replace(/\s/g, '')
-    saveToken = atom.config.get 'bug-report.saveToken'
-    tokenPath = atom.config.get 'bug-report.tokenPath'
-    if not token and saveToken
-      try
-        token = fs.readFileSync(tokenPath).toString()
-      catch e
+    token = @tokenInput.val().replace(/\s/g, '') or @storedToken()
 
     if token
-      if tokenPath and saveToken
+      saveToken = atom.config.get('bug-report.saveToken')
+      tokenPath = atom.config.get('bug-report.tokenPath')
+
+      if saveToken and tokenPath
         try
           fs.writeFileSync(tokenPath, token)
         catch e
