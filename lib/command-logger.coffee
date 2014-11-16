@@ -30,14 +30,7 @@ class CommandLogger
   # Returns a {String} containing the Markdown for the report.
   getText: (externalData) ->
     lines = []
-    lastTime = null
-
-    if externalData
-      lastTime = externalData.time
-    else
-      @eachEvent (event) ->
-        lastTime = event.time
-        event.name is 'bug-report:open'
+    lastTime = @calculateLastEventTime(externalData)
 
     @eachEvent (event) =>
       return true if event.time > lastTime
@@ -80,6 +73,23 @@ class CommandLogger
       event.source = source
       event.count  = 1
       event.time   = Date.now()
+
+  # Private: Calculates the time of the last event to be reported.
+  #
+  # data - Data from an external bug passed in from another package.
+  #
+  # Returns the {Date} of the last event that should be reported.
+  calculateLastEventTime: (data) ->
+    lastTime = null
+
+    if data
+      lastTime = data.time
+    else
+      @eachEvent (event) ->
+        lastTime = event.time
+        event.name is 'bug-report:open'
+
+    lastTime
 
   # Private: Executes a function on each event in chronological order.
   #
