@@ -53,7 +53,7 @@ class PanelView extends View
 
   initialize: (@editor) ->
     oldView?.destroy()
-    oldView = @
+    oldView = this
 
     if @tokenSaved()
       @tokenInput.attr(placeholder: 'Default: stored in file')
@@ -84,12 +84,12 @@ class PanelView extends View
       @destroy()
 
     @disposables.add atom.workspace.onDidChangeActivePaneItem (activeItem) =>
-      if activeItem in [@editor, @]
+      if activeItem in [@editor, this]
         @css(display: 'inline-block')
       else
         @hide()
 
-    atom.workspaceView.prependToBottom @
+    atom.workspaceView.prependToBottom this
 
   trim: (str) -> str.replace(/^\s*|\s*$/g, '')
 
