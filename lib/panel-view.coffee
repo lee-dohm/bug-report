@@ -103,17 +103,8 @@ class PanelView extends View
     title = @validateTitle()
     return unless title
 
-    userSlashRepo = @repoInput.val().replace(/\s/g, '')
-    userSlashRepo or= 'atom/atom'
-    if not (userRepo = /([^:\/]+)\/([^.\/]+)(\.git)?$/.exec userSlashRepo)
-      atom.confirm
-        message: 'Bug-Report Error:\n'
-        detailedMessage: 'The GitHub Repo field should be of the form ' +
-                         '"USER/REPO" where USER is the GitHub user and ' +
-                         'REPO is the name of the repository.  This can ' +
-                         'be found at the end of the URL for the repo.'
-        buttons: ['OK']
-      return
+    [user, repo] = @validateRepo()
+    return unless user and repo
 
     token = @tokenInput.val().replace(/\s/g, '')
     saveToken = atom.config.get 'bug-report.saveToken'
@@ -137,7 +128,7 @@ class PanelView extends View
         buttons: ['OK']
       return
 
-    @postActual(title, userRepo[1], userRepo[2], token)
+    @postActual(title, user, repo, token)
 
   postActual: (title, user, repo, token) ->
     @prePost.hide()
@@ -209,6 +200,24 @@ class PanelView extends View
   #
   # Returns the trimmed version of the {String}.
   trim: (str) -> str.replace(/^\s*|\s*$/g, '')
+
+  # Private: Validates the repo input text.
+  #
+  # Returns an {Array} containing the user and repo values.
+  validateRepo: ->
+    repoText = @repoInput.val().replace(/\s/g, '') or 'atom/atom'
+    if not (match = /([^:\/]+)\/([^.\/]+)(\.git)?$/.exec repoText)
+      atom.confirm
+        message: 'Bug-Report Error:\n'
+        detailedMessage: 'The GitHub Repo field should be of the form ' +
+                         '"USER/REPO" where USER is the GitHub user and ' +
+                         'REPO is the name of the repository.  This can ' +
+                         'be found at the end of the URL for the repo.'
+        buttons: ['OK']
+
+      []
+    else
+      [match[1], match[2]]
 
   # Private: Validates the bug title.
   #

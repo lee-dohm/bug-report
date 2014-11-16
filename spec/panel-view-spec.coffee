@@ -114,6 +114,7 @@ describe 'PanelView', ->
       beforeEach ->
         spyOn(atom, 'confirm')
         panel.titleInput.val('test')
+        panel.tokenInput.val('foo')
 
       it 'displays a dialog if the repo is formatted incorrectly', ->
         panel.repoInput.val('foo')
@@ -122,9 +123,15 @@ describe 'PanelView', ->
         expect(atom.confirm).toHaveBeenCalled()
         expect(postActualSpy).not.toHaveBeenCalled()
 
+      it 'defaults to atom/atom if empty', ->
+        panel.repoInput.val('')
+
+        panel.post()
+
+        expect(postActualSpy).toHaveBeenCalledWith('test', 'atom', 'atom', 'foo')
+
       it 'parses user/repo input', ->
         panel.repoInput.val('user/repo')
-        panel.tokenInput.val('foo')
 
         panel.post()
 
@@ -132,7 +139,6 @@ describe 'PanelView', ->
 
       it 'parses GitHub web URLs', ->
         panel.repoInput.val('https://github.com/user/repo')
-        panel.tokenInput.val('foo')
 
         panel.post()
 
@@ -140,7 +146,6 @@ describe 'PanelView', ->
 
       it 'parses GitHub https repository URLs', ->
         panel.repoInput.val('https://github.com/user/repo.git')
-        panel.tokenInput.val('foo')
 
         panel.post()
 
@@ -148,7 +153,6 @@ describe 'PanelView', ->
 
       it 'parses GitHub ssh repository URLs', ->
         panel.repoInput.val('git@github.com:user/repo.git')
-        panel.tokenInput.val('foo')
 
         panel.post()
 
