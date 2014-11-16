@@ -56,7 +56,7 @@ class PanelView extends View
     oldView?.destroy()
     oldView = this
 
-    if @tokenSaved()
+    if @storedToken()
       @tokenInput.attr(placeholder: 'Default: stored in file')
 
     @disposables = new CompositeDisposable
@@ -190,11 +190,14 @@ class PanelView extends View
   # Private: Determines if a GitHub security token has been saved.
   #
   # Returns a {Boolean} indicating whether a security token is available.
-  tokenSaved: ->
+  storedToken: ->
     saveToken = atom.config.get('bug-report.saveToken')
     tokenPath = atom.config.get('bug-report.tokenPath')
 
-    saveToken and fs.existsSync(tokenPath)
+    try
+      saveToken and fs.readFileSync(tokenPath).toString()
+    catch e
+      undefined
 
   # Private: Trims all leading and trailing whitespace in `str`.
   #

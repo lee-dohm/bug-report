@@ -38,7 +38,7 @@ describe 'PanelView', ->
       expect(panel.tokenInput.prop('placeholder')).toBe ''
 
     it 'displays a placeholder for the token if a token has been saved previously', ->
-      fs.writeFileSync(tokenPath, '')
+      fs.writeFileSync(tokenPath, 'foo')
 
       waitsForPromise ->
         atom.workspace.open().then (e) ->
@@ -67,6 +67,25 @@ describe 'PanelView', ->
       panel.destroy()
 
       expect(panel.disposables.dispose).toHaveBeenCalled()
+
+  describe 'storedToken', ->
+    it 'is falsy when bug-report.saveToken is false', ->
+      atom.config.set('bug-report.saveToken', false)
+
+      expect(panel.storedToken()).toBeFalsy()
+
+    it 'is falsy when saveToken is true but tokenPath is unset', ->
+      atom.config.set('bug-report.tokenPath', undefined)
+
+      expect(panel.storedToken()).toBeFalsy()
+
+    it 'is falsy when saveToken is true, tokenPath is set but the token file does not exist', ->
+      expect(panel.storedToken()).toBeFalsy()
+
+    it 'returns the token when the token is set', ->
+      fs.writeFileSync(tokenPath, 'foo')
+
+      expect(panel.storedToken()).toBe 'foo'
 
   describe 'posting', ->
     describe 'titleInput', ->
