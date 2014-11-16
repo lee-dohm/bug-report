@@ -1,5 +1,6 @@
-{CompositeDisposable, View}  = require 'atom'
-fs      = require 'fs'
+{View} = require 'atom'
+{CompositeDisposable} = require 'event-kit'
+fs = require 'fs'
 request = require 'request'
 
 oldView = null
@@ -57,37 +58,36 @@ class PanelView extends View
     if @tokenSaved()
       @tokenInput.attr(placeholder: 'Default: stored in file')
 
-    atom.commands.add '.title-input', 'core:focus-next', =>
-      @repoInput.focus()
+    @compositeDisposable = new CompositeDisposable
 
-    atom.commands.add '.title-input', 'core:confirm', =>
-      @post()
+    @compositeDisposable.add atom.commands.add '.title-input',
+      'core:focus-next': =>
+        @repoInput.focus()
+      'core:confirm': =>
+        @post()
 
-    atom.commands.add '.repo-input', 'core:focus-next', =>
-      @tokenInput.focus()
+    @compositeDisposable.add atom.commands.add '.repo-input',
+      'core:focus-next': =>
+        @tokenInput.focus()
+      'core:confirm': =>
+        @post()
 
-    atom.commands.add '.repo-input', 'core:confirm', =>
-      @post()
+    @compositeDisposable.add atom.commands.add '.token-input',
+      'core:focus-next': =>
+        @titleInput.focus()
+      'core:confirm': =>
+        @post()
 
-    atom.commands.add '.token-input', 'core:focus-next', =>
-      @titleInput.focus()
-
-    atom.commands.add '.token-input', 'core:confirm', =>
-      @post()
-
-    @subscribe @postBtn,  'click', => @post()
+    @subscribe @postBtn, 'click', => @post()
     @subscribe @closeBtn, 'click', =>
       @editor.destroy()
       @destroy()
 
-    disposable = atom.workspace.onDidChangeActivePaneItem (activeItem) =>
+    @compositeDisposable.add atom.workspace.onDidChangeActivePaneItem (activeItem) =>
       if activeItem in [@editor, @]
         @css(display: 'inline-block')
       else
         @hide()
-
-    @disposables ?= []
-    @disposables.push disposable
 
     atom.workspaceView.prependToBottom @
 
@@ -196,6 +196,6 @@ class PanelView extends View
     saveToken and fs.existsSync(tokenPath)
 
   destroy: ->
-    for disposable in @disposables then disposable.dispose()
+    @compositeDisposable.dispose()
     @unsubscribe()
     @detach()

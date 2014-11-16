@@ -10,9 +10,10 @@
     "atom": ">=0.136.0"
   },
   "dependencies": {
+    "event-kit": "0.7.2",
+    "moment": "^2.8.0",
     "plist": "^1.1.0",
-    "request": "~2.0.0",
-    "moment": "^2.8.0"
+    "request": "~2.0.0"
   },
   "devDependencies": {
     "temp": "~0.6.0"

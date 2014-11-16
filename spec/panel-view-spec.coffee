@@ -59,3 +59,11 @@ describe 'PanelView', ->
     it 'adds command listeners for core:focus-next and core:confirm to tokenInput', ->
       expect(helper.hasCommand(panel.tokenInput, 'core:focus-next')).toBeTruthy()
       expect(helper.hasCommand(panel.tokenInput, 'core:confirm')).toBeTruthy()
+
+  describe 'destruction', ->
+    it 'disposes of the commands', ->
+      spyOn(panel.compositeDisposable, 'dispose')
+
+      panel.destroy()
+
+      expect(panel.compositeDisposable.dispose).toHaveBeenCalled()
