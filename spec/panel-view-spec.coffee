@@ -72,15 +72,15 @@ describe 'PanelView', ->
     it 'is falsy when bug-report.saveToken is false', ->
       atom.config.set('bug-report.saveToken', false)
 
-      expect(panel.storedToken()).toBeFalsy()
+      expect(panel.storedToken()).toBeUndefined()
 
     it 'is falsy when saveToken is true but tokenPath is unset', ->
       atom.config.set('bug-report.tokenPath', undefined)
 
-      expect(panel.storedToken()).toBeFalsy()
+      expect(panel.storedToken()).toBeUndefined()
 
     it 'is falsy when saveToken is true, tokenPath is set but the token file does not exist', ->
-      expect(panel.storedToken()).toBeFalsy()
+      expect(panel.storedToken()).toBeUndefined()
 
     it 'returns the token when the token is set', ->
       fs.writeFileSync(tokenPath, 'foo')
@@ -88,6 +88,11 @@ describe 'PanelView', ->
       expect(panel.storedToken()).toBe 'foo'
 
   describe 'posting', ->
+    [postActualSpy] = []
+
+    beforeEach ->
+      postActualSpy = spyOn(panel, 'postActual')
+
     describe 'titleInput', ->
       beforeEach ->
         spyOn(atom, 'confirm')

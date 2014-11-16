@@ -122,6 +122,7 @@ class PanelView extends View
       try
         token = fs.readFileSync tokenPath
       catch e
+
     if token
       if tokenPath and saveToken
         try
@@ -136,10 +137,11 @@ class PanelView extends View
         buttons: ['OK']
       return
 
+    @postActual(title, userRepo[1], userRepo[2].replace(/\.git$/i, ''), token)
+
+  postActual: (title, user, repo, token) ->
     @prePost.hide()
     @postMsg.css display:'inline-block'
-    user = userRepo[1]
-    repo = userRepo[2].replace(/\.git$/i, '')
     url  = "https://api.github.com/repos/#{user}/#{repo}/issues"
     options =
       url: url
@@ -194,8 +196,10 @@ class PanelView extends View
     saveToken = atom.config.get('bug-report.saveToken')
     tokenPath = atom.config.get('bug-report.tokenPath')
 
+    return undefined unless saveToken
+
     try
-      saveToken and fs.readFileSync(tokenPath).toString()
+      fs.readFileSync(tokenPath).toString()
     catch e
       undefined
 
