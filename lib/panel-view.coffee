@@ -105,7 +105,7 @@ class PanelView extends View
 
     userSlashRepo = @repoInput.val().replace(/\s/g, '')
     userSlashRepo or= 'atom/atom'
-    if not (userRepo = /([^:\/]+)\/([^\/]+)$/.exec userSlashRepo)
+    if not (userRepo = /([^:\/]+)\/([^.\/]+)(\.git)?$/.exec userSlashRepo)
       atom.confirm
         message: 'Bug-Report Error:\n'
         detailedMessage: 'The GitHub Repo field should be of the form ' +
@@ -137,7 +137,7 @@ class PanelView extends View
         buttons: ['OK']
       return
 
-    @postActual(title, userRepo[1], userRepo[2].replace(/\.git$/i, ''), token)
+    @postActual(title, userRepo[1], userRepo[2], token)
 
   postActual: (title, user, repo, token) ->
     @prePost.hide()
