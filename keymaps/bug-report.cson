@@ -9,3 +9,9 @@
 # https://atom.io/docs/latest/advanced/keymaps
 '.workspace':
   'ctrl-shift-alt-b': 'bug-report:open'
+'.title-input.native-key-bindings':
+  'enter': 'core:confirm'
+'.token-input.native-key-bindings':
+  'enter': 'core:confirm'
+'.repo-input.native-key-bindings':
+  'enter': 'core:confirm'

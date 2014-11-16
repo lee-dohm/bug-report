@@ -2,9 +2,6 @@
 fs      = require 'fs'
 request = require 'request'
 
-TAB = 9      # Keydown: TAB key
-RETURN = 13  # Keydown: RETURN key
-
 oldView = null
 
 module.exports =
@@ -55,35 +52,30 @@ class PanelView extends View
           value:  'Close Bug Report'
 
   initialize: (@editor) ->
-
     oldView?.destroy()
     oldView = @
 
     saveToken = atom.config.get 'bug-report.saveToken'
-    if saveToken and
-        fs.existsSync atom.config.get 'bug-report.tokenPath'
-      @tokenInput.attr placeholder: 'Default: stored in file'
+    if saveToken and fs.existsSync(atom.config.get('bug-report.tokenPath'))
+      @tokenInput.attr(placeholder: 'Default: stored in file')
 
-    @subscribe @titleInput, 'keydown', (e) =>
-      switch e.which
-        when TAB then @repoInput.focus()
-        when RETURN then @post()
-        else return
-      false
+    atom.commands.add '.title-input', 'core:focus-next', =>
+      @repoInput.focus()
 
-    @subscribe @repoInput, 'keydown',  (e) =>
-      switch e.which
-        when TAB then @tokenInput.focus()
-        when RETURN then @post()
-        else return
-      false
+    atom.commands.add '.title-input', 'core:confirm', =>
+      @post()
 
-    @subscribe @tokenInput, 'keydown',  (e) =>
-      switch e.which
-        when TAB then @titleInput.focus()
-        when RETURN then @post()
-        else return
-      false
+    atom.commands.add '.repo-input', 'core:focus-next', =>
+      @tokenInput.focus()
+
+    atom.commands.add '.repo-input', 'core:confirm', =>
+      @post()
+
+    atom.commands.add '.token-input', 'core:focus-next', =>
+      @titleInput.focus()
+
+    atom.commands.add '.token-input', 'core:confirm', =>
+      @post()
 
     @subscribe @postBtn,  'click', => @post()
     @subscribe @closeBtn, 'click', =>
@@ -91,8 +83,10 @@ class PanelView extends View
       @destroy()
 
     disposable = atom.workspace.onDidChangeActivePaneItem (activeItem) =>
-      if activeItem in [@editor, @] then @css display:'inline-block'
-      else @hide()
+      if activeItem in [@editor, @]
+        @css(display: 'inline-block')
+      else
+        @hide()
 
     @disposables ?= []
     @disposables.push disposable
@@ -152,7 +146,7 @@ class PanelView extends View
       url: url
       method: 'POST'
       headers:
-        "User-Agent": "lee-dohm"
+        "User-Agent": "atom.io/packages/bug-report"
         Authorization: 'token ' + token
       json: true
       body:
