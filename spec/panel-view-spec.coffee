@@ -67,3 +67,30 @@ describe 'PanelView', ->
       panel.destroy()
 
       expect(panel.disposables.dispose).toHaveBeenCalled()
+
+  describe 'posting', ->
+    describe 'titleInput', ->
+      beforeEach ->
+        spyOn(atom, 'confirm')
+
+      it 'displays a dialog if the title is empty', ->
+        panel.post()
+
+        expect(atom.confirm).toHaveBeenCalled()
+
+      it 'displays a dialog if the title consists only of whitespace', ->
+        panel.titleInput.val('     ')
+        panel.post()
+
+        expect(atom.confirm).toHaveBeenCalled()
+
+    describe 'repoInput', ->
+      beforeEach ->
+        spyOn(atom, 'confirm')
+        panel.titleInput.val('test')
+
+      it 'displays a dialog if the repo is formatted incorrectly', ->
+        panel.repoInput.val('foo')
+        panel.post()
+
+        expect(atom.confirm).toHaveBeenCalled()

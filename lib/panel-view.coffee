@@ -51,6 +51,7 @@ class PanelView extends View
           type:   'button'
           value:  'Close Bug Report'
 
+  # Public: Initializes the `PanelView`.
   initialize: (@editor) ->
     oldView?.destroy()
     oldView = this
@@ -91,16 +92,16 @@ class PanelView extends View
 
     atom.workspaceView.prependToBottom this
 
-  trim: (str) -> str.replace(/^\s*|\s*$/g, '')
+  # Public: Destroys the PanelView.
+  destroy: ->
+    @disposables.dispose()
+    @unsubscribe()
+    @detach()
 
+  # Private: Posts the bug report to GitHub.
   post: ->
-    title = @trim @titleInput.val()
-    if not title
-      atom.confirm
-        message: 'Bug-Report Error:\n'
-        detailedMessage: 'The title field is empty.'
-        buttons: ['OK']
-      return
+    title = @validateTitle()
+    return unless title
 
     userSlashRepo = @repoInput.val().replace(/\s/g, '')
     userSlashRepo or= 'atom/atom'
@@ -195,7 +196,24 @@ class PanelView extends View
 
     saveToken and fs.existsSync(tokenPath)
 
-  destroy: ->
-    @disposables.dispose()
-    @unsubscribe()
-    @detach()
+  # Private: Trims all leading and trailing whitespace in `str`.
+  #
+  # str - A {String} to be trimmed.
+  #
+  # Returns the trimmed version of the {String}.
+  trim: (str) -> str.replace(/^\s*|\s*$/g, '')
+
+  # Private: Validates the bug title.
+  #
+  # Returns a {String} containing the title or `undefined`.
+  validateTitle: ->
+    title = @trim @titleInput.val()
+    if not title
+      atom.confirm
+        message: 'Bug-Report Error:\n'
+        detailedMessage: 'The title field is empty.'
+        buttons: ['OK']
+
+      undefined
+    else
+      title
