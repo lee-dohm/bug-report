@@ -1,7 +1,6 @@
 {$}    = require 'atom'
 moment = require 'moment'
 
-logSizeMask = 0xf
 ignoredCommands =
   'show.bs.tooltip':   yes
   'shown.bs.tooltip':  yes
