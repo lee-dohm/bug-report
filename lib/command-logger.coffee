@@ -7,6 +7,8 @@ ignoredCommands =
   'hide.bs.tooltip':   yes
   'hidden.bs.tooltip': yes
 
+tenMinutes = 10 * 60 * 1000
+
 module.exports =
 # Handles logging all of the Atom commands for the automatic repro steps feature.
 #
@@ -35,7 +37,7 @@ class CommandLogger
 
     @eachEvent (event) =>
       return true if event.time > lastTime
-      return false if not event.name or lastTime - event.time >= 10*60*1000
+      return false if not event.name or lastTime - event.time >= tenMinutes
 
       lines.push(@formatEvent(event, lastTime))
 
