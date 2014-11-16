@@ -82,14 +82,12 @@ class CommandLogger
   #
   # Returns the {Date} of the last event that should be reported.
   calculateLastEventTime: (data) ->
-    lastTime = null
+    return data.time if data
 
-    if data
-      lastTime = data.time
-    else
-      @eachEvent (event) ->
-        lastTime = event.time
-        event.name is 'bug-report:open'
+    lastTime = null
+    @eachEvent (event) ->
+      lastTime = event.time
+      return true if event.name is 'bug-report:open'
 
     lastTime
 
