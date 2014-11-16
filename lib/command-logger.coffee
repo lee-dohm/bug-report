@@ -21,7 +21,7 @@ class CommandLogger
   constructor: ->
     @initLog()
     atom.commands.onWillDispatch (event) =>
-      @logEvent(event)
+      @logCommand(event)
 
   # Public: Formats the command log for the bug report.
   #
@@ -35,7 +35,7 @@ class CommandLogger
     if externalData
       lastTime = externalData.time
     else
-      @eachEvent (event) =>
+      @eachEvent (event) ->
         lastTime = event.time
         event.name is 'bug-report:open'
 
@@ -62,24 +62,24 @@ class CommandLogger
   latestEvent: ->
     @eventLog[@logIndex]
 
-  # Public: Logs the command event.
+  # Public: Logs the command.
   #
-  # event - Command event to be logged.
-  logEvent: (event) ->
-    {type: name, target: source} = event
+  # command - Command to be logged.
+  logCommand: (command) ->
+    {type: name, target: source} = command
     return if name of ignoredCommands
 
-    entry = @eventLog[@logIndex]
+    event = @latestEvent()
 
-    if entry.name is name
-      entry.count++
+    if event.name is name
+      event.count++
     else
       @logIndex = (@logIndex + 1) % @logSize
-      entry = @eventLog[@logIndex]
-      entry.name   = name
-      entry.source = source
-      entry.count  = 1
-      entry.time   = Date.now()
+      event = @latestEvent()
+      event.name   = name
+      event.source = source
+      event.count  = 1
+      event.time   = Date.now()
 
   # Private: Executes a function on each event in chronological order.
   #
@@ -103,9 +103,13 @@ class CommandLogger
 
   # Private: Formats a command event for reporting.
   #
+  # event - Event to be formatted.
+  # lastTime - Time of the last event to report.
+  #
   # Returns the {String} format of the command event.
   formatEvent: (event, lastTime) ->
-    "#{@formatCount(event.count)} #{@formatTime(lastTime - event.time)} #{event.name} #{@formatSource(event.source)}"
+    {count, time, name, source} = event
+    "#{@formatCount(count)} #{@formatTime(lastTime - time)} #{name} #{@formatSource(source)}"
 
   # Private: Format the command source for reporting.
   #
