@@ -1,4 +1,4 @@
-{View}  = require 'atom'
+{CompositeDisposable, View}  = require 'atom'
 fs      = require 'fs'
 request = require 'request'
 
@@ -6,7 +6,6 @@ oldView = null
 
 module.exports =
 class PanelView extends View
-
   @content: ->
     @div class:'bug-report-panel tool-panel', tabindex:-1, =>
       @div class:'label-hdr',  'Bug Report'
@@ -55,8 +54,7 @@ class PanelView extends View
     oldView?.destroy()
     oldView = @
 
-    saveToken = atom.config.get 'bug-report.saveToken'
-    if saveToken and fs.existsSync(atom.config.get('bug-report.tokenPath'))
+    if @tokenSaved()
       @tokenInput.attr(placeholder: 'Default: stored in file')
 
     atom.commands.add '.title-input', 'core:focus-next', =>
@@ -187,6 +185,15 @@ class PanelView extends View
       @linkIssue.text 'issue #' + body.number
 
       @postPost.css display:'inline-block'
+
+  # Private: Determines if a GitHub security token has been saved.
+  #
+  # Returns a {Boolean} indicating whether a security token is available.
+  tokenSaved: ->
+    saveToken = atom.config.get('bug-report.saveToken')
+    tokenPath = atom.config.get('bug-report.tokenPath')
+
+    saveToken and fs.existsSync(tokenPath)
 
   destroy: ->
     for disposable in @disposables then disposable.dispose()

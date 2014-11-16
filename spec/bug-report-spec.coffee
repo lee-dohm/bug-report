@@ -14,10 +14,7 @@ describe 'BugReport', ->
 
   describe 'activation', ->
     it 'creates the open command', ->
-      commands = atom.commands.findCommands(target: atom.workspaceView.element)
-      found = true for command in commands when command.name is 'bug-report:open'
-
-      expect(found).toBeTruthy()
+      expect(helper.hasCommand(atom.workspaceView, 'bug-report:open')).toBeTruthy()
 
     it 'creates the command logger', ->
       expect(BugReport.commandLogger).not.toBeNull()
@@ -27,10 +24,7 @@ describe 'BugReport', ->
       atom.packages.deactivatePackage('bug-report')
 
     it 'removes the open command', ->
-      commands = atom.commands.findCommands(target: atom.workspaceView.element)
-      found = true for command in commands when command.name is 'bug-report:open'
-
-      expect(found).toBeFalsy()
+      expect(helper.hasCommand(atom.workspaceView, 'bug-report:open')).toBeFalsy()
 
     it 'destroys the command logger', ->
       expect(BugReport.commandLogger).toBeNull()

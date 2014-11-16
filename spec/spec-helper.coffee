@@ -8,6 +8,15 @@ module.exports =
   getFixture: (name) ->
     fs.readFileSync(path.join(__dirname, 'fixtures', name)).toString()
 
+  # Public: Indicates whether `item` has a command named `commandName`.
+  #
+  # Returns a {Boolean} indicating if it has the given command.
+  hasCommand: (item, commandName) ->
+    commands = atom.commands.findCommands(target: item.element)
+    found = true for command in commands when command.name is commandName
+
+    found
+
   # Public: Indents the text one Markdown level.
   #
   # Returns the text with each line indented by four spaces.
