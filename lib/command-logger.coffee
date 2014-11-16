@@ -132,8 +132,3 @@ class CommandLogger
       name: null
       count: 0
       time: null
-
-  # Unused?
-  destroy: ->
-    if @originalTrigger? then $.fn.trigger = @originalTrigger
-    @keymapMatchedSubscription?.off()
