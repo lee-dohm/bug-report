@@ -4,6 +4,12 @@ fs = require 'fs'
 request = require 'request'
 
 oldView = null
+errorMessages =
+  404: "
+    A 404 error was returned when posting this issue. This is usually caused by an authentication
+    problem such as a bad token. The token must have at least \"repo\" or \"public repo\"
+    permission. See the instructions in the README for obtaining a GitHub API Token.
+  "
 
 module.exports =
 class PanelView extends View
@@ -129,7 +135,7 @@ class PanelView extends View
   postActual: (title, user, repo, token) ->
     @prePost.hide()
     @postMsg.css display:'inline-block'
-    url  = "https://api.github.com/repos/#{user}/#{repo}/issues"
+    url = "https://api.github.com/repos/#{user}/#{repo}/issues"
     options =
       url: url
       method: 'POST'
@@ -139,42 +145,40 @@ class PanelView extends View
       json: true
       body:
         title: title
-        body:  @editor.getText()
+        body: @editor.getText()
 
     request options, (err, res, body) =>
       if err or body?.message or res?.statusCode isnt 201
-        detailedMessage =
-          'Error posting to GitHub repo ' + url + '\n\n' +
-            (err?.message       ? '') + '  ' +
-            (body?.message      ? '') + '  ' +
-            (res?.statusCode    ? '') + '  ' +
-            (res?.statusMessage ? '') + '  ' +
-            (res?.body          ? '')
-
-        detailedMessage = detailedMessage.replace \
-          'Not Found  404  Not Found  [object Object]', """
-            A 404 error was returned when posting this issue.
-            This is usually caused by an authentication problem
-            such as a bad token. The token must have at least
-            "repo" or "public repo" permission. See the
-            instructions in the readme for obtaining a
-            GitHub API Token.
-          """
-
+        detailedMessage = errorMessages[res?.statusCode] ? @standardMessage(err, res, body)
         @displayError(detailedMessage)
 
-        @prePost.css display:'inline-block'
+        @prePost.css display: 'inline-block'
         @postMsg.hide()
         @postPost.hide()
         return
 
       @postMsg.hide()
-      @linkRepo.attr href:"https://github.com/#{user}/#{repo}"
-      @linkRepo.text "#{user}/#{repo}"
-      @linkIssue.attr href:body.html_url
-      @linkIssue.text 'issue #' + body.number
 
-      @postPost.css display:'inline-block'
+      @linkRepo.attr(href:"https://github.com/#{user}/#{repo}")
+      @linkRepo.text("#{user}/#{repo}")
+      @linkIssue.attr(href: body.html_url)
+      @linkIssue.text("Issue ##{body.number}")
+
+      @postPost.css(display: 'inline-block')
+
+  # Private: Formats the standard error message from the response information.
+  #
+  # err - Error information
+  # res - HTTP response information
+  # body - HTTP response body
+  #
+  # Returns a {String} containing the error message to display.
+  standardMessage: (err, res, body) ->
+    "
+      Error posting to GitHub repo #{url}\n\n
+      #{err?.message ? ''} - #{body?.message ? ''} - #{res?.statusCode ? ''} -
+      #{res?.statusMessage ? ''} - #{res?.body ? ''}
+    "
 
   # Private: Determines if a GitHub security token has been saved.
   #
@@ -203,10 +207,9 @@ class PanelView extends View
   validateRepo: ->
     repoText = @repoInput.val().replace(/\s/g, '') or 'atom/atom'
     if not (match = /([^:\/]+)\/([^.\/]+)(\.git)?$/.exec repoText)
-      @displayError 'The GitHub Repo field should be of the form ' +
-                    '"USER/REPO" where USER is the GitHub user and ' +
-                    'REPO is the name of the repository.  This can ' +
-                    'be found at the end of the URL for the repo.'
+      @displayError "The GitHub Repo field should be of the form \"USER/REPO\" where USER is the
+                     GitHub user and REPO is the name of the repository. This can be found at the
+                     end of the URL for the repo."
 
       []
     else
