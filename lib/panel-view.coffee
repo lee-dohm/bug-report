@@ -106,24 +106,8 @@ class PanelView extends View
     [user, repo] = @validateRepo()
     return unless user and repo
 
-    token = @tokenInput.val().replace(/\s/g, '') or @storedToken()
-
-    if token
-      saveToken = atom.config.get('bug-report.saveToken')
-      tokenPath = atom.config.get('bug-report.tokenPath')
-
-      if saveToken and tokenPath
-        try
-          fs.writeFileSync(tokenPath, token)
-        catch e
-          console.log "bug-report: Error writing token to path #{tokenPath}. #{e.message}"
-    else
-      atom.confirm
-        message: 'Bug-Report Error:\n'
-        detailedMessage: 'You must enter a GitHub personal API token. ' +
-                          'See https://help.github.com/articles/creating-an-access-token-for-command-line-use/'
-        buttons: ['OK']
-      return
+    token = @validateToken()
+    return unless token
 
     @postActual(title, user, repo, token)
 
@@ -230,3 +214,29 @@ class PanelView extends View
       undefined
     else
       title
+
+  # Private: Validates the token input text.
+  #
+  # Returns a {String} containing the token or `undefined`.
+  validateToken: ->
+    token = @tokenInput.val().replace(/\s/g, '') or @storedToken()
+
+    if token
+      saveToken = atom.config.get('bug-report.saveToken')
+      tokenPath = atom.config.get('bug-report.tokenPath')
+
+      if saveToken and tokenPath
+        try
+          fs.writeFileSync(tokenPath, token)
+        catch e
+          console.log "bug-report: Error writing token to path #{tokenPath}. #{e.message}"
+
+      token
+    else
+      atom.confirm
+        message: 'Bug-Report Error:\n'
+        detailedMessage: 'You must enter a GitHub personal API token. ' +
+                          'See https://help.github.com/articles/creating-an-access-token-for-command-line-use/'
+        buttons: ['OK']
+
+      undefined
