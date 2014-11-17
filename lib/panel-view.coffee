@@ -111,6 +111,21 @@ class PanelView extends View
 
     @postActual(title, user, repo, token)
 
+  # Private: Displays a standardized error dialog box.
+  #
+  # detailed - A {String} containing the detailed error message to display.
+  displayError: (detailed) ->
+    atom.confirm
+      message: 'Bug-Report Error:'
+      detailedMessage: detailed
+      buttons: ['OK']
+
+  # Private: Performs the actual post to GitHub.
+  #
+  # title - Title of the bug to post.
+  # user - User name of the GitHub repo owner.
+  # repo - Repo name of the GitHub repository.
+  # token - Current user's personal API token.
   postActual: (title, user, repo, token) ->
     @prePost.hide()
     @postMsg.css display:'inline-block'
@@ -188,13 +203,10 @@ class PanelView extends View
   validateRepo: ->
     repoText = @repoInput.val().replace(/\s/g, '') or 'atom/atom'
     if not (match = /([^:\/]+)\/([^.\/]+)(\.git)?$/.exec repoText)
-      atom.confirm
-        message: 'Bug-Report Error:\n'
-        detailedMessage: 'The GitHub Repo field should be of the form ' +
-                         '"USER/REPO" where USER is the GitHub user and ' +
-                         'REPO is the name of the repository.  This can ' +
-                         'be found at the end of the URL for the repo.'
-        buttons: ['OK']
+      @displayError 'The GitHub Repo field should be of the form ' +
+                    '"USER/REPO" where USER is the GitHub user and ' +
+                    'REPO is the name of the repository.  This can ' +
+                    'be found at the end of the URL for the repo.'
 
       []
     else
@@ -206,10 +218,7 @@ class PanelView extends View
   validateTitle: ->
     title = @trim @titleInput.val()
     if not title
-      atom.confirm
-        message: 'Bug-Report Error:\n'
-        detailedMessage: 'The title field is empty.'
-        buttons: ['OK']
+      @displayError 'The title field is empty'
 
       undefined
     else
@@ -233,10 +242,7 @@ class PanelView extends View
 
       token
     else
-      atom.confirm
-        message: 'Bug-Report Error:\n'
-        detailedMessage: 'You must enter a GitHub personal API token. ' +
-                          'See https://help.github.com/articles/creating-an-access-token-for-command-line-use/'
-        buttons: ['OK']
+      @displayError 'You must enter a GitHub personal API token. ' +
+        'See https://help.github.com/articles/creating-an-access-token-for-command-line-use/'
 
       undefined
