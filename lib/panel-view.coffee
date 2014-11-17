@@ -214,7 +214,7 @@ class PanelView extends View
 
   # Private: Validates the bug title.
   #
-  # Returns a {String} containing the title or `undefined`.
+  # Returns a {String} containing the title or `undefined` if there was a problem.
   validateTitle: ->
     title = @trim @titleInput.val()
     if not title
@@ -226,7 +226,7 @@ class PanelView extends View
 
   # Private: Validates the token input text.
   #
-  # Returns a {String} containing the token or `undefined`.
+  # Returns a {String} containing the token or `undefined` if there was a problem.
   validateToken: ->
     token = @tokenInput.val().replace(/\s/g, '') or @storedToken()
 
