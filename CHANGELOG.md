@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## **master** &mdash; *Unreleased*
+
+* Added the ability to specify the repository to post the bug to by the following methods (see the README for details):
+    * Base GitHub URL
+    * HTTPS GitHub remote
+    * SSH GitHub remote
+
 ## **v0.5.0** &mdash; *Released: 8 November 2014*
 
 * [PR #25](https://github.com/lee-dohm/bug-report/pull/25) by [@mark-hahn](https://github.com/mark-hahn)
