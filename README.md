@@ -56,7 +56,7 @@ Sample template:
      -0:02.6 pane:active-item-modified-status-changed
   3x -0:02.5 editor:display-updated
      -0:00.0 bug-report:open
-     
+
 ---
 
 <small>This report was created in and posted from the Atom editor using the package `bug-report` version 0.4.0.</small>
@@ -73,9 +73,12 @@ For the Bug Report package to post on your behalf, you need to supply a GitHub A
 Instructions:
 
 1. Enter a title for the issue.
-1. Specify the repository to post the Issue against as `user/reponame`.
-    * This can be found in the URL for the repo, for example `https://github.com/lee-dohm/bug-report` would be `lee-dohm/bug-report`.
-    * The default repository is for the core Atom editor at `atom/atom`. Only post there if you have checked that the problem isn't in a user-supplied package. Do this by running Atom in safe mode with `atom --safe`.
+1. Specify the repository to post the Issue against. It can be specified in any of the following ways:
+    * As a `user/repo` string &mdash; `lee-dohm/bug-report`
+    * As the URL to the repository's main GitHub page &mdash; `https://github.com/lee-dohm/bug-report`
+    * As the HTTPS repository remote &mdash; `https://github.com/lee-dohm/bug-report.git`
+    * As the SSH repository remote &mdash; `git@github.com:lee-dohm/bug-report.git`
+    * **Note:** The default repository is for the core Atom editor at `atom/atom`. Only post there if you have checked that the problem isn't in a user-supplied package. Do this by running Atom in safe mode with `atom --safe`.
 1. Enter your GitHub API token.
     * By default, this token is saved for future sessions. See the [Configuration](#configuration) section for more information.
 1. Click `Post Issue`. It should only take a few seconds for Bug Report to post the Issue, after which the panel will show you a link to it.
