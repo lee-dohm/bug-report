@@ -150,6 +150,7 @@ class PanelView extends View
             (res?.statusCode    ? '') + '  ' +
             (res?.statusMessage ? '') + '  ' +
             (res?.body          ? '')
+
         detailedMessage = detailedMessage.replace \
           'Not Found  404  Not Found  [object Object]', """
             A 404 error was returned when posting this issue.
@@ -159,10 +160,9 @@ class PanelView extends View
             instructions in the readme for obtaining a
             GitHub API Token.
           """
-        atom.confirm
-          message: 'Bug-Report Error:\n'
-          detailedMessage: detailedMessage
-          buttons: ['OK']
+
+        @displayError(detailedMessage)
+
         @prePost.css display:'inline-block'
         @postMsg.hide()
         @postPost.hide()
