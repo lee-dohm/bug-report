@@ -20,49 +20,48 @@ Execute the `bug-report:open` command (<kbd>Ctrl+Alt+Shift+B</kbd> by default) a
 
 Sample bug report output:
 
-```markdown
-[Enter description here]
+    [Enter description here]
 
-![Screenshot or GIF movie](url)
+    ![Screenshot or GIF movie](url)
 
-## Repro Steps
+    ## Repro Steps
 
-1. [First Step]
-2. [Second Step]
-3. [and so on...]
+    1. [First Step]
+    2. [Second Step]
+    3. [and so on...]
 
-**Expected:** [Enter expected behavior here]
-**Actual:** [Enter actual behavior here]
+    **Expected:** [Enter expected behavior here]
+    **Actual:** [Enter actual behavior here]
 
-## Command History
+    ## Command History
 
-```
-     -0:01.9 editor:display-updated (atom-text-editor.editor.editor-colors)
-  2x -0:01.9 mousewheel (div.line)
-     -0:01.9 editor:display-updated (atom-text-editor.editor.editor-colors)
-     -0:01.9 mousewheel (div.line)
-     -0:01.9 editor:display-updated (atom-text-editor.editor.editor-colors)
-     -0:01.8 mousewheel (div.line)
-  3x -0:01.8 editor:display-updated (atom-text-editor.editor.editor-colors)
-     -0:00.0 bug-report:open (input.hidden-input)
-```
+    ```
+         -0:01.9 editor:display-updated (atom-text-editor.editor.editor-colors)
+      2x -0:01.9 mousewheel (div.line)
+         -0:01.9 editor:display-updated (atom-text-editor.editor.editor-colors)
+         -0:01.9 mousewheel (div.line)
+         -0:01.9 editor:display-updated (atom-text-editor.editor.editor-colors)
+         -0:01.8 mousewheel (div.line)
+      3x -0:01.8 editor:display-updated (atom-text-editor.editor.editor-colors)
+         -0:00.0 bug-report:open (input.hidden-input)
+    ```
 
-## Versions
+    ## Versions
 
-* **Atom:**       0.147.0-d235180
-* **Atom-Shell:** 0.19.2
-* **OS:**         Mac OS X 10.10
-* **Misc**
-    * apm  0.111.0
-    * npm  1.4.4
-    * node 0.10.33
-    * python 2.7.6
-    * git 1.9.3
+    * **Atom:**       0.147.0-d235180
+    * **Atom-Shell:** 0.19.2
+    * **OS:**         Mac OS X 10.10
+    * **Misc**
+        * apm  0.111.0
+        * npm  1.4.4
+        * node 0.10.33
+        * python 2.7.6
+        * git 1.9.3
 
----
+    ---
 
-<small>This report was created in and posted from the Atom editor using the package `bug-report` v0.5.0.</small>
-```
+    <small>This report was created in and posted from the Atom editor using the package `bug-report` v0.5.0.</small>
+
 
 ### Automatic Posting to GitHub
 
