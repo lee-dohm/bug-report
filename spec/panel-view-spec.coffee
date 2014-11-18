@@ -82,6 +82,12 @@ describe 'PanelView', ->
     it 'is falsy when saveToken is true, tokenPath is set but the token file does not exist', ->
       expect(panel.storedToken()).toBeUndefined()
 
+    it 'is undefined when the saveToken is false, even if the token file exists', ->
+      atom.config.set('bug-report.saveToken', false)
+      fs.writeFileSync(tokenPath, 'foo')
+
+      expect(panel.storedToken()).toBeUndefined()
+
     it 'returns the token when the token is set', ->
       fs.writeFileSync(tokenPath, 'foo')
 
