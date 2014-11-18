@@ -21,8 +21,6 @@ Execute the `bug-report:open` command (<kbd>Ctrl+Alt+Shift+B</kbd> by default) a
 Sample template:
 
 ```markdown
-## Description
-
 [Enter description here]
 
 ![Screenshot or GIF movie](url)
@@ -36,30 +34,34 @@ Sample template:
 **Expected:** [Enter expected behavior here]
 **Actual:** [Enter actual behavior here]
 
+## Command History
+
+```
+     -0:01.9 editor:display-updated (atom-text-editor.editor.editor-colors)
+  2x -0:01.9 mousewheel (div.line)
+     -0:01.9 editor:display-updated (atom-text-editor.editor.editor-colors)
+     -0:01.9 mousewheel (div.line)
+     -0:01.9 editor:display-updated (atom-text-editor.editor.editor-colors)
+     -0:01.8 mousewheel (div.line)
+  3x -0:01.8 editor:display-updated (atom-text-editor.editor.editor-colors)
+     -0:00.0 bug-report:open (input.hidden-input)
+```
+
 ## Versions
 
-* **Atom:**       0.141.0
-* **Atom-Shell:** 0.18.2
-* **OS:**         Microsoft Windows 8 Pro with Media Center
+* **Atom:**       0.147.0-d235180
+* **Atom-Shell:** 0.19.2
+* **OS:**         Mac OS X 10.10
 * **Misc**
-    * apm  0.109.0
-    * npm  1.4.4
-    * node 0.10.32
-    * python 2.7.5
-    * git 1.7.11.msysgit.1
-    * visual studio 2013
-
-## Command History:
-     -0:03.1 ready
-     -0:03.0 focus
-     -0:02.8 editor:display-updated
-     -0:02.6 pane:active-item-modified-status-changed
-  3x -0:02.5 editor:display-updated
-     -0:00.0 bug-report:open
+    * apm  0.111.0
+    * npm  1.4.4
+    * node 0.10.33
+    * python 2.7.6
+    * git 1.9.3
 
 ---
 
-<small>This report was created in and posted from the Atom editor using the package `bug-report` version 0.4.0.</small>
+<small>This report was created in and posted from the Atom editor using the package `bug-report` v0.5.0.</small>
 ```
 
 ### Automatic Posting to GitHub
