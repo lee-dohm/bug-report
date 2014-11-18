@@ -16,9 +16,9 @@ apm install bug-report
 
 ## Usage
 
-Execute the `bug-report:open` command (<kbd>Ctrl+Alt+Shift+B</kbd> by default) and a new Markdown file will be opened with important version information and fields for entering repro steps to help make great Atom bug reports.
+Execute the `bug-report:open` command (<kbd>Ctrl+Alt+Shift+B</kbd> by default) and a new Markdown file will be opened with fields for entering description, repro steps and images or movies, plus important diagnostic information to help make great Atom bug reports.
 
-Sample template:
+Sample bug report output:
 
 ```markdown
 [Enter description here]
