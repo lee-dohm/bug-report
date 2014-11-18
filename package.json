@@ -2,7 +2,7 @@
   "name": "bug-report",
   "main": "./lib/bug-report",
   "version": "0.5.0",
-  "description": "Creates a nicely formatted Markdown file for reporting an Atom bug and posts the issue to a GitHub repo.",
+  "description": "Dumps relevant information into a nicely formatted Markdown file for easily reporting a bug to Atom or a third-party package.",
   "activationEvents": [],
   "repository": "https://github.com/lee-dohm/bug-report",
   "license": "MIT",
