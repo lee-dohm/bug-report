@@ -245,7 +245,7 @@ class PanelView extends View
 
       token
     else
-      @displayError 'You must enter a GitHub personal API token. ' +
-        'See https://help.github.com/articles/creating-an-access-token-for-command-line-use/'
+      @displayError 'You must enter a GitHub personal API token.
+        See https://help.github.com/articles/creating-an-access-token-for-command-line-use/'
 
       undefined
