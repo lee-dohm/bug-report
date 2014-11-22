@@ -12,6 +12,8 @@ errorMessages =
   "
 
 module.exports =
+# Public: Panel placed at the bottom of the bug report editor pane that allows posting the report
+#         directly to GitHub.
 class PanelView extends View
   @content: ->
     @div class:'bug-report-panel tool-panel', tabindex:-1, =>
@@ -57,7 +59,9 @@ class PanelView extends View
           type:   'button'
           value:  'Close Bug Report'
 
-  # Public: Initializes the `PanelView`.
+  # Public: Initializes the {PanelView}.
+  #
+  # * `editor` {TextEditor} instance within which to display the panel.
   initialize: (@editor) ->
     oldView?.destroy()
     oldView = this
@@ -98,7 +102,7 @@ class PanelView extends View
 
     atom.workspaceView.prependToBottom this
 
-  # Public: Destroys the PanelView.
+  # Public: Destroys the {PanelView}.
   destroy: ->
     @disposables.dispose()
     @unsubscribe()
@@ -119,7 +123,7 @@ class PanelView extends View
 
   # Private: Displays a standardized error dialog box.
   #
-  # detailed - A {String} containing the detailed error message to display.
+  # * `detailed` {String} containing the detailed error message to display.
   displayError: (detailed) ->
     atom.confirm
       message: 'Bug-Report Error:'
@@ -128,10 +132,10 @@ class PanelView extends View
 
   # Private: Performs the actual post to GitHub.
   #
-  # title - Title of the bug to post.
-  # user - User name of the GitHub repo owner.
-  # repo - Repo name of the GitHub repository.
-  # token - Current user's personal API token.
+  # * `title` Title {String} of the bug to post.
+  # * `user` User name {String} of the GitHub repository owner.
+  # * `repo` Repo name {String} of the GitHub repository.
+  # * `token` {String} containing the current user's personal API token.
   postActual: (title, user, repo, token) ->
     @prePost.hide()
     @postMsg.css display:'inline-block'
@@ -168,9 +172,9 @@ class PanelView extends View
 
   # Private: Formats the standard error message from the response information.
   #
-  # err - Error information
-  # res - HTTP response information
-  # body - HTTP response body
+  # * `err` Error information
+  # * `res` HTTP response information
+  # * `body` HTTP response body
   #
   # Returns a {String} containing the error message to display.
   standardMessage: (err, res, body) ->
@@ -196,14 +200,14 @@ class PanelView extends View
 
   # Private: Trims all leading and trailing whitespace in `str`.
   #
-  # str - A {String} to be trimmed.
+  # * `str` {String} to be trimmed.
   #
   # Returns the trimmed version of the {String}.
   trim: (str) -> str.replace(/^\s*|\s*$/g, '')
 
   # Private: Validates the repo input text.
   #
-  # Returns an {Array} containing the user and repo values.
+  # Returns an {Array} containing the user and repo values. It will be empty if there is a problem.
   validateRepo: ->
     repoText = @repoInput.val().replace(/\s/g, '') or 'atom/atom'
     if not (match = /([^:\/]+)\/([^.\/]+)(\.git)?$/.exec repoText)

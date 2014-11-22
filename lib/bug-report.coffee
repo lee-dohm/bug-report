@@ -6,12 +6,15 @@ spawnSync = require('child_process').spawnSync
 PanelView = require('./panel-view')
 CommandLogger = require('./command-logger')
 
-defaultTokenPath = if process.platform is 'win32'
-                     path.join(process.env['USERPROFILE'], 'bug-report.token')
-                   else
-                     path.join(process.env['HOME'], '.bug-report.token')
+defaultTokenPath =
+  if process.platform is 'win32'
+    path.join(process.env['USERPROFILE'], 'bug-report.token')
+  else
+    path.join(process.env['HOME'], '.bug-report.token')
 
-# Handles package activation and deactivation.
+# Public: Provides a system whereby the user can create and easily post high-quality bug reports.
+#
+# This system also allows other packages to report their bugs through the `bug-report` package.
 class BugReport
   config:
     saveToken:
@@ -81,7 +84,7 @@ class BugReport
 
   # Private: Gets the `apm --version` information.
   #
-  # Returns the output of `apm --version`.
+  # Returns a {String} containing the output of `apm --version`.
   apmVersionInfo: ->
     cmd = path.join(atom.packages.resourcePath, 'apm/node_modules/atom-package-manager/bin/apm')
     cmd += '.cmd' if os.platform() is 'win32'
@@ -96,6 +99,7 @@ class BugReport
 
   # Private: Extracts the Atom `package.json` information.
   #
+  # Returns an empty {Object} if there was an error.
   # Returns an {Object} containing the package information.
   atomPackageInfo: ->
     try
@@ -123,7 +127,10 @@ class BugReport
 
   # Private: Gets the OS X version information.
   #
-  # Returns an {Object} containing the version info.
+  # Returns an empty {Object} if an error occurred.
+  # Returns an {Object} containing the following keys:
+  #     * `ProductName` a {String} with the official name of the OS.
+  #     * `ProductVersion` a {String} with the user-facing version number.
   macVersionInfo: ->
     try
       text = fs.readFileSync('/System/Library/CoreServices/SystemVersion.plist', 'utf8')
@@ -148,18 +155,18 @@ class BugReport
       when 'win32' then @winMarketingVersion()
       else "#{os.platform()} #{os.release()}"
 
-  # Private: Get the package information.
+  # Private: Get the `bug-report` package information.
   #
-  # Returns the package metadata.
+  # Returns an {Object} containing the package metadata.
   packageVersionInfo: ->
     try
       JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json')))
     catch e
       {}
 
-  # Private: Get bug-report version number text.
+  # Private: Get `bug-report` version number text.
   #
-  # Returns the package name and version.
+  # Returns a {String} containing the package name and version.
   packageVersionText: (info = @packageVersionInfo()) ->
     text = "`#{info.name ? 'bug-report'}`"
     text += " v#{info.version}" if info.version
@@ -167,7 +174,9 @@ class BugReport
 
   # Private: Strips ANSI escape codes from the given text.
   #
-  # Returns the text without the ANSI gobbledygook.
+  # * `text` {String} of text to remove the ANSI escape codes from.
+  #
+  # Returns the {String} without the ANSI gobbledygook.
   stripAnsi: (text) ->
     text.replace(/\x1b[^m]*m/g, '')
 

@@ -10,7 +10,7 @@ ignoredCommands =
 tenMinutes = 10 * 60 * 1000
 
 module.exports =
-# Handles logging all of the Atom commands for the automatic repro steps feature.
+# Public: Handles logging all of the Atom commands for the automatic repro steps feature.
 #
 # It uses an array as a circular data structure to log only the most recent commands.
 class CommandLogger
@@ -28,9 +28,9 @@ class CommandLogger
 
   # Public: Formats the command log for the bug report.
   #
-  # externalData - Other information to include in the log.
+  # * `externalData` An {Object} containing other information to include in the log.
   #
-  # Returns a {String} containing the Markdown for the report.
+  # Returns a {String} of the Markdown for the report.
   getText: (externalData) ->
     lines = []
     lastTime = @calculateLastEventTime(externalData)
@@ -60,7 +60,9 @@ class CommandLogger
 
   # Public: Logs the command.
   #
-  # command - Command to be logged.
+  # * `command` Command {Object} to be logged
+  #   * `type` Name {String} of the command
+  #   * `target` {String} describing where the command was triggered
   logCommand: (command) ->
     {type: name, target: source} = command
     return if name of ignoredCommands
@@ -79,7 +81,7 @@ class CommandLogger
 
   # Private: Calculates the time of the last event to be reported.
   #
-  # data - Data from an external bug passed in from another package.
+  # * `data` Data from an external bug passed in from another package.
   #
   # Returns the {Date} of the last event that should be reported.
   calculateLastEventTime: (data) ->
@@ -97,7 +99,17 @@ class CommandLogger
   # The function will receive an event object and the iteration will stop if the function returns a
   # truthy value.
   #
-  # fn - {Function} to execute.
+  # * `fn` {Function} to execute for each event in the log
+  #   * `event` An {Object} describing the event passed to your function
+  #
+  # ## Examples
+  #
+  # This code would output the name of each event to the console.
+  #
+  # ```coffee
+  # logger.eachEvent (event) ->
+  #   console.log event.name
+  # ```
   eachEvent: (fn) ->
     for offset in [1..@logSize]
       stop = fn(@eventLog[(@logIndex + offset) % @logSize])
@@ -114,8 +126,8 @@ class CommandLogger
 
   # Private: Formats a command event for reporting.
   #
-  # event - Event to be formatted.
-  # lastTime - Time of the last event to report.
+  # * `event` Event {Object} to be formatted.
+  # * `lastTime` {Date} of the last event to report.
   #
   # Returns the {String} format of the command event.
   formatEvent: (event, lastTime) ->
@@ -123,6 +135,8 @@ class CommandLogger
     "#{@formatCount(count)} #{@formatTime(lastTime - time)} #{name} #{@formatSource(source)}"
 
   # Private: Format the command source for reporting.
+  #
+  # * `source` {Object} describing from where the event originated
   #
   # Returns the {String} format of the command source.
   formatSource: (source) ->
@@ -135,6 +149,8 @@ class CommandLogger
     "(#{nodeText}#{idText}#{classText})"
 
   # Private: Format the command time for reporting.
+  #
+  # * `time` {Date} to format
   #
   # Returns the {String} format of the command time.
   formatTime: (time) ->
