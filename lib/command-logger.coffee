@@ -9,10 +9,10 @@ ignoredCommands =
 
 tenMinutes = 10 * 60 * 1000
 
-module.exports =
 # Public: Handles logging all of the Atom commands for the automatic repro steps feature.
 #
 # It uses an array as a circular data structure to log only the most recent commands.
+module.exports =
 class CommandLogger
   # Public: Format of time information.
   dateFmt: '-m:ss.S'

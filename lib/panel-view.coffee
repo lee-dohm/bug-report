@@ -11,9 +11,9 @@ errorMessages =
     permission. See the instructions in the README for obtaining a GitHub API Token.
   "
 
-module.exports =
 # Public: Panel placed at the bottom of the bug report editor pane that allows posting the report
 #         directly to GitHub.
+module.exports =
 class PanelView extends View
   @content: ->
     @div class:'bug-report-panel tool-panel', tabindex:-1, =>
