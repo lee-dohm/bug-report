@@ -91,7 +91,6 @@ class PanelView extends View
 
     @subscribe @postBtn, 'click', => @post()
     @subscribe @closeBtn, 'click', =>
-      @editor.destroy()
       @destroy()
 
     @disposables.add atom.workspace.onDidChangeActivePaneItem (activeItem) =>
@@ -105,6 +104,9 @@ class PanelView extends View
 
   # Public: Destroys the {PanelView}.
   destroy: ->
+    @editor?.destroy()
+    @editor = null
+
     @disposables.dispose()
     @unsubscribe()
     @detach()

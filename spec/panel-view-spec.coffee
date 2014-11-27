@@ -63,10 +63,12 @@ describe 'PanelView', ->
   describe 'destruction', ->
     it 'disposes of the commands', ->
       spyOn(panel.disposables, 'dispose')
+      spyOn(editor, 'destroy')
 
       panel.destroy()
 
       expect(panel.disposables.dispose).toHaveBeenCalled()
+      expect(editor.destroy).toHaveBeenCalled()
 
   describe 'storedToken', ->
     it 'is falsy when bug-report.saveToken is false', ->
