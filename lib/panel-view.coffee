@@ -100,7 +100,8 @@ class PanelView extends View
       else
         @hide()
 
-    atom.workspaceView.prependToBottom this
+    atom.workspace.addBottomPanel
+      item: this
 
   # Public: Destroys the {PanelView}.
   destroy: ->
