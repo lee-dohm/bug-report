@@ -60,6 +60,9 @@ describe 'PanelView', ->
       expect(helper.hasCommand(panel.tokenInput, 'core:focus-next')).toBeTruthy()
       expect(helper.hasCommand(panel.tokenInput, 'core:confirm')).toBeTruthy()
 
+    it 'adds a command listener for core:cancel to the workspace view', ->
+      expect(helper.hasCommand(atom.workspaceView, 'core:cancel')).toBeTruthy()
+
   describe 'destruction', ->
     it 'disposes of the commands', ->
       spyOn(panel.disposables, 'dispose')
@@ -69,6 +72,27 @@ describe 'PanelView', ->
 
       expect(panel.disposables.dispose).toHaveBeenCalled()
       expect(editor.destroy).toHaveBeenCalled()
+
+  describe 'core:cancel', ->
+    it 'destroys the editor and panel when Abandon is chosen', ->
+      spyOn(atom, 'confirm').andReturn(0)
+      spyOn(panel.disposables, 'dispose')
+      spyOn(editor, 'destroy')
+
+      atom.commands.dispatch(atom.workspaceView.element, 'core:cancel')
+
+      expect(panel.disposables.dispose).toHaveBeenCalled()
+      expect(editor.destroy).toHaveBeenCalled()
+
+    it 'does not destroy the editor nor panel when Keep is chosen', ->
+      spyOn(atom, 'confirm').andReturn(1)
+      spyOn(panel.disposables, 'dispose')
+      spyOn(editor, 'destroy')
+
+      atom.commands.dispatch(atom.workspaceView.element, 'core:cancel')
+
+      expect(panel.disposables.dispose).not.toHaveBeenCalled()
+      expect(editor.destroy).not.toHaveBeenCalled()
 
   describe 'storedToken', ->
     it 'is falsy when bug-report.saveToken is false', ->

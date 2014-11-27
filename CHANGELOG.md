@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## **v0.5.2** &mdash; *Released: 26 November 2014*
+
+* [#36](https://github.com/lee-dohm/bug-report/issues/36) &mdash; Allow <kbd>ESC</kbd> to close the bug report
+
 ## **v0.5.1** &mdash; *Released: 26 November 2014*
 
 * Added the ability to specify the repository to post the bug to by the following methods (see the README for details):

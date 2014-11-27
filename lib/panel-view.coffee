@@ -89,13 +89,23 @@ class PanelView extends View
       'core:confirm': =>
         @post()
 
+    @disposables.add atom.commands.add 'atom-workspace',
+      'core:cancel': =>
+        return if @hidden
+
+        button = atom.confirm
+          message: 'Abandon the bug report?'
+          buttons: ['Abandon', 'Keep']
+
+        @destroy() if button is 0
+
     @subscribe @postBtn, 'click', => @post()
     @subscribe @closeBtn, 'click', =>
       @destroy()
 
     @disposables.add atom.workspace.onDidChangeActivePaneItem (activeItem) =>
       if activeItem in [@editor, this]
-        @css(display: 'inline-block')
+        @show()
       else
         @hide()
 
@@ -132,6 +142,11 @@ class PanelView extends View
       message: 'Bug-Report Error:'
       detailedMessage: detailed
       buttons: ['OK']
+
+  # Private: Hide the {PanelView}.
+  hide: ->
+    @hidden = true
+    super()
 
   # Private: Performs the actual post to GitHub.
   #
@@ -172,6 +187,11 @@ class PanelView extends View
       @linkIssue.text("Issue ##{body.number}")
 
       @postPost.css(display: 'inline-block')
+
+  # Private: Show the {PanelView}.
+  show: ->
+    @hidden = false
+    @css(display: 'inline-block')
 
   # Private: Formats the standard error message from the response information.
   #
