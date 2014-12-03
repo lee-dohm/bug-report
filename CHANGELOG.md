@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## **master** &mdash; *Unreleased*
+
+* [#39](https://github.com/lee-dohm/bug-report/issues/40) &mdash; Add command to insert the Atom version information into the current editor
+
 ## **v0.5.3** &mdash; *Released: 3 December 2014*
 
 * [#40](https://github.com/lee-dohm/bug-report/issues/40) &mdash; Removed `editor:display-updated` and `mousewheel` events from the command log

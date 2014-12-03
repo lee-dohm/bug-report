@@ -16,6 +16,9 @@ describe 'BugReport', ->
     it 'creates the open command', ->
       expect(helper.hasCommand(atom.workspaceView, 'bug-report:open')).toBeTruthy()
 
+    it 'creates the insert version info command', ->
+      expect(helper.hasCommand(atom.workspaceView, 'bug-report:insert-version-info')).toBeTruthy()
+
     it 'creates the command logger', ->
       expect(BugReport.commandLogger).not.toBeNull()
 
@@ -25,6 +28,9 @@ describe 'BugReport', ->
 
     it 'removes the open command', ->
       expect(helper.hasCommand(atom.workspaceView, 'bug-report:open')).toBeFalsy()
+
+    it 'removes the insert version info command', ->
+      expect(helper.hasCommand(atom.workspaceView, 'bug-report:insert-version-info')).toBeFalsy()
 
     it 'destroys the command logger', ->
       expect(BugReport.commandLogger).toBeNull()
@@ -70,3 +76,15 @@ describe 'BugReport', ->
 
     it 'returns the package name when there is no version', ->
       expect(BugReport.packageVersionText(name: 'foo')).toBe '`foo`'
+
+  describe 'insert version info command', ->
+    describe 'when an editor is open', ->
+      [editor] = []
+
+      beforeEach ->
+        waitsForPromise -> atom.workspace.open('foo.txt').then (e) -> editor = e
+
+      it 'inserts the version information into the editor', ->
+        atom.commands.dispatch(atom.workspaceView.element, 'bug-report:insert-version-info')
+
+        expect(editor.getText()).toEqual BugReport.versionSection()

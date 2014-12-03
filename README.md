@@ -36,32 +36,33 @@ Sample bug report output:
     ## Command History
 
     ```
-         -0:01.9 editor:display-updated (atom-text-editor.editor.editor-colors)
-      2x -0:01.9 mousewheel (div.line)
-         -0:01.9 editor:display-updated (atom-text-editor.editor.editor-colors)
-         -0:01.9 mousewheel (div.line)
-         -0:01.9 editor:display-updated (atom-text-editor.editor.editor-colors)
-         -0:01.8 mousewheel (div.line)
-      3x -0:01.8 editor:display-updated (atom-text-editor.editor.editor-colors)
-         -0:00.0 bug-report:open (input.hidden-input)
+        -0:22.6 pane-container:active-pane-item-changed (atom-pane-container.panes)
+        -0:22.6 active-buffer-changed (div.status-bar)
+        -0:22.6 pane:active-item-changed (atom-pane.pane.active.with-minimap)
+        -0:22.6 editor:detached (atom-text-editor.editor.editor-colors)
+        -0:22.6 editor:will-be-removed (atom-text-editor.editor.editor-colors)
+        -0:22.6 pane:item-removed (atom-pane.pane.active.with-minimap)
+        -0:22.5 editor:detached (atom-text-editor.editor.editor-colors)
+        -0:22.5 editor:will-be-removed (atom-text-editor.editor.editor-colors)
+        -0:22.5 minimap:scroll (div.minimap)
+        -0:00.0 bug-report:open (input.hidden-input)
     ```
 
     ## Versions
 
-    * **Atom:**       0.147.0-d235180
-    * **Atom-Shell:** 0.19.2
-    * **OS:**         Mac OS X 10.10
+    * **Atom:**       0.153.0-7738472
+    * **Atom-Shell:** 0.19.4
+    * **OS:**         Mac OS X 10.10.1
     * **Misc**
-        * apm  0.111.0
-        * npm  1.4.4
-        * node 0.10.33
-        * python 2.7.6
-        * git 1.9.3
+    * apm  0.111.0
+    * npm  1.4.4
+    * node 0.10.33
+    * python 2.7.6
+    * git 1.9.3
 
     ---
 
-    <small>This report was created in and posted from the Atom editor using the package `bug-report` v0.5.0.</small>
-
+    <small>This report was created in and posted from the Atom editor using the package `bug-report` v0.5.3.</small>
 
 ### Automatic Posting to GitHub
 
@@ -98,6 +99,7 @@ Once you have posted you will not be able to post this same report again. If you
 ### Commands
 
 * `bug-report:open` &mdash; Opens the bug report template with version information already included
+* `bug-report:insert-version-info` &mdash; Inserts the formatted version information into the active text editor
 
 ### Keybinding
 

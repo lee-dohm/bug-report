@@ -1,10 +1,12 @@
-fs = require('fs')
-os = require('os')
-path = require('path')
-plist = require('plist')
+fs = require 'fs'
+os = require 'os'
+path = require 'path'
+
+plist = require 'plist'
 spawnSync = require('child_process').spawnSync
-PanelView = require('./panel-view')
-CommandLogger = require('./command-logger')
+
+PanelView = require './panel-view'
+CommandLogger = require './command-logger'
 
 defaultTokenPath =
   if process.platform is 'win32'
@@ -30,18 +32,23 @@ class BugReport
     openReport = (@externalData) =>
       @open()
 
-    @command = atom.commands.add 'atom-workspace', 'bug-report:open', (event, externalData) ->
-      if externalData and not externalData.body
-        externalData =
-          title: 'Error'
-          time:   Date.now()
-          body:   externalData
+    @commands = atom.commands.add 'atom-workspace',
+      'bug-report:open': (event, externalData) ->
+        if externalData and not externalData.body
+          externalData =
+            title: 'Error'
+            time:   Date.now()
+            body:   externalData
 
-      openReport(externalData)
+        openReport(externalData)
+
+      'bug-report:insert-version-info': =>
+        editor = atom.workspace.getActiveTextEditor()
+        editor?.insertText(@versionSection())
 
   # Public: Deactivates the package.
   deactivate: ->
-    @command.dispose()
+    @commands.dispose()
     @commandLogger = null
 
   # Public: Opens the bug report.
@@ -67,13 +74,7 @@ class BugReport
 
       #{@commandLogger.getText(@externalData)}
 
-      ## Versions
-
-      * **Atom:**       #{atom.getVersion()}
-      * **Atom-Shell:** #{@atomShellVersionText()}
-      * **OS:**         #{@osMarketingVersion()}
-      * **Misc**
-      #{@apmVersionText()}
+      #{@versionSection()}
 
       ---
 
@@ -179,6 +180,20 @@ class BugReport
   # Returns the {String} without the ANSI gobbledygook.
   stripAnsi: (text) ->
     text.replace(/\x1b[^m]*m/g, '')
+
+  # Private: Builds a collection of version information.
+  #
+  # Returns a {String} containing the version text.
+  versionSection: ->
+    """
+    ## Versions
+
+    * **Atom:**       #{atom.getVersion()}
+    * **Atom-Shell:** #{@atomShellVersionText()}
+    * **OS:**         #{@osMarketingVersion()}
+    * **Misc**
+    #{@apmVersionText()}
+    """
 
   # Private: Generates the marketing version text for Windows systems.
   #
