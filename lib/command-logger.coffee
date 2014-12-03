@@ -1,6 +1,8 @@
 {$}    = require 'atom'
 moment = require 'moment'
 
+# Command names that are ignored and not included in the log. This uses an Object to provide fast
+# string matching.
 ignoredCommands =
   'show.bs.tooltip':        yes
   'shown.bs.tooltip':       yes
@@ -9,6 +11,7 @@ ignoredCommands =
   'editor:display-updated': yes
   'mousewheel':             yes
 
+# Ten minutes in milliseconds.
 tenMinutes = 10 * 60 * 1000
 
 # Public: Handles logging all of the Atom commands for the automatic repro steps feature.
@@ -37,13 +40,13 @@ class CommandLogger
     lines = []
     lastTime = @calculateLastEventTime(externalData)
 
-    @eachEvent (event) =>
+    @eachEvent (event, stop) =>
       return true if event.time > lastTime
       return false if not event.name or lastTime - event.time >= tenMinutes
 
       lines.push(@formatEvent(event, lastTime))
 
-      return true if event.name is 'bug-report:open'
+      stop() if event.name is 'bug-report:open'
 
     if externalData
       lines.push("     #{@formatTime(0)} #{externalData.title}")
@@ -90,19 +93,20 @@ class CommandLogger
     return data.time if data
 
     lastTime = null
-    @eachEvent (event) ->
+    @eachEvent (event, stop) ->
       lastTime = event.time
-      return true if event.name is 'bug-report:open'
+      stop() if event.name is 'bug-report:open'
 
     lastTime
 
   # Private: Executes a function on each event in chronological order.
   #
-  # The function will receive an event object and the iteration will stop if the function returns a
-  # truthy value.
+  # This function is used instead of similar underscore functions because the log is held in a
+  # circular buffer.
   #
-  # * `fn` {Function} to execute for each event in the log
-  #   * `event` An {Object} describing the event passed to your function
+  # * `fn` {Function} to execute for each event in the log.
+  #   * `event` An {Object} describing the event passed to your function.
+  #   * `stop` A {Function} that stops the iteration when it is called.
   #
   # ## Examples
   #
@@ -113,9 +117,13 @@ class CommandLogger
   #   console.log event.name
   # ```
   eachEvent: (fn) ->
+    stopFlag = false
+    stop = ->
+      stopFlag = true
+
     for offset in [1..@logSize]
-      stop = fn(@eventLog[(@logIndex + offset) % @logSize])
-      break if stop
+      fn(@eventLog[(@logIndex + offset) % @logSize], stop)
+      break if stopFlag
 
   # Private: Format the command count for reporting.
   #
