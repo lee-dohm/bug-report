@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## **v0.5.3** &mdash; *Released: 3 December 2014*
+
+* [#40](https://github.com/lee-dohm/bug-report/issues/40) &mdash; Removed `editor:display-updated` and `mousewheel` events from the command log
+
 ## **v0.5.2** &mdash; *Released: 26 November 2014*
 
 * [#36](https://github.com/lee-dohm/bug-report/issues/36) &mdash; Allow <kbd>ESC</kbd> to close the bug report

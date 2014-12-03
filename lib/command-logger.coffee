@@ -2,10 +2,12 @@
 moment = require 'moment'
 
 ignoredCommands =
-  'show.bs.tooltip':   yes
-  'shown.bs.tooltip':  yes
-  'hide.bs.tooltip':   yes
-  'hidden.bs.tooltip': yes
+  'show.bs.tooltip':        yes
+  'shown.bs.tooltip':       yes
+  'hide.bs.tooltip':        yes
+  'hidden.bs.tooltip':      yes
+  'editor:display-updated': yes
+  'mousewheel':             yes
 
 tenMinutes = 10 * 60 * 1000
 

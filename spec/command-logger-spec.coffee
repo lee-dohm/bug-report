@@ -34,10 +34,20 @@ describe 'CommandLogger', ->
       expect(logger.latestEvent().name).toBe 'foo:bar'
       expect(logger.latestEvent().count).toBe 2
 
-    it 'ignores some commands', ->
+    it 'ignores show.bs.tooltip commands', ->
       dispatch('show.bs.tooltip')
 
       expect(logger.latestEvent().name).not.toBe 'show.bs.tooltip'
+
+    it 'ignores editor:display-updated commands', ->
+      dispatch('editor:display-updated')
+
+      expect(logger.latestEvent().name).not.toBe 'editor:display-updated'
+
+    it 'ignores mousewheel commands', ->
+      dispatch('mousewheel')
+
+      expect(logger.latestEvent().name).not.toBe 'mousewheel'
 
     it 'only logs up to `logSize` commands', ->
       dispatch(char) for char in ['a'..'z']
