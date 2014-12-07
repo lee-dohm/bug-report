@@ -22,6 +22,19 @@ describe 'BugReport', ->
     it 'creates the command logger', ->
       expect(BugReport.commandLogger).not.toBeNull()
 
+    it 'creates an openReport service', ->
+      bugReport = null
+      spyOn(BugReport, 'openReport')
+
+      waitsFor (done) ->
+        atom.services.consume 'bug-report', '1.0.0', (report) ->
+          bugReport = report
+          done()
+
+      runs ->
+        bugReport.openReport('foo')
+        expect(BugReport.openReport).toHaveBeenCalledWith('foo')
+
   describe 'deactivation', ->
     beforeEach ->
       atom.packages.deactivatePackage('bug-report')
@@ -34,6 +47,15 @@ describe 'BugReport', ->
 
     it 'destroys the command logger', ->
       expect(BugReport.commandLogger).toBeNull()
+
+    it 'removes the openReport service', ->
+      bugReport = null
+      spyOn(BugReport, 'openReport')
+
+      atom.services.consume 'bug-report', '1.0.0', (report) ->
+        bugReport = report
+
+      expect(bugReport).toBeNull()
 
   describe 'apmVersionText', ->
     it 'returns what is expected', ->
