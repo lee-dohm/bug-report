@@ -3,6 +3,7 @@
 ## **master** &mdash; *Unreleased*
 
 * [#39](https://github.com/lee-dohm/bug-report/issues/40) &mdash; Add command to insert the Atom version information into the current editor
+* [#42](https://github.com/lee-dohm/bug-report/pull/42) &mdash; Adds an `openReport` service so other packages can open a bug report
 
 ## **v0.5.3** &mdash; *Released: 3 December 2014*
 

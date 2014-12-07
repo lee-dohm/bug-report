@@ -7,7 +7,7 @@
   "repository": "https://github.com/lee-dohm/bug-report",
   "license": "MIT",
   "engines": {
-    "atom": ">=0.136.0"
+    "atom": ">=0.154.0"
   },
   "dependencies": {
     "event-kit": "^0.7.2",

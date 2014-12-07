@@ -105,6 +105,11 @@ Once you have posted you will not be able to post this same report again. If you
 
 * `ctrl-shift-alt-b` &mdash; Executes `bug-report:open`
 
+## Services
+
+* `bug-report`
+    * `openReport` &mdash; Opens a bug report
+
 ## Copyright
 
 Copyright &copy; 2014 by [Lee Dohm](http://www.lee-dohm.com). See [LICENSE](https://github.com/lee-dohm/bug-report/blob/master/LICENSE.md) for details.
