@@ -48,6 +48,15 @@ describe 'BugReport', ->
     it 'destroys the command logger', ->
       expect(BugReport.commandLogger).toBeNull()
 
+    it 'removes the openReport service', ->
+      bugReport = null
+      spyOn(BugReport, 'openReport')
+
+      atom.services.consume 'bug-report', '1.0.0', (report) ->
+        bugReport = report
+
+      expect(bugReport).toBeNull()
+
   describe 'apmVersionText', ->
     it 'returns what is expected', ->
       versionText = helper.getFixture('apm-version.txt')

@@ -38,13 +38,14 @@ class BugReport
         editor = atom.workspace.getActiveTextEditor()
         editor?.insertText(@versionSection())
 
-    atom.services.provide 'bug-report', '1.0.0',
+    @service = atom.services.provide 'bug-report', '1.0.0',
       openReport: (externalData) =>
         @openReport(externalData)
 
   # Public: Deactivates the package.
   deactivate: ->
     @commands.dispose()
+    @service.dispose()
     @commandLogger = null
 
   openReport: (externalData) ->
