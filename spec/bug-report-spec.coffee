@@ -22,6 +22,19 @@ describe 'BugReport', ->
     it 'creates the command logger', ->
       expect(BugReport.commandLogger).not.toBeNull()
 
+    it 'creates an openReport service', ->
+      bugReport = null
+      spyOn(BugReport, 'openReport')
+
+      waitsFor (done) ->
+        atom.services.consume 'bug-report', '1.0.0', (report) ->
+          bugReport = report
+          done()
+
+      runs ->
+        bugReport.openReport('foo')
+        expect(BugReport.openReport).toHaveBeenCalledWith('foo')
+
   describe 'deactivation', ->
     beforeEach ->
       atom.packages.deactivatePackage('bug-report')

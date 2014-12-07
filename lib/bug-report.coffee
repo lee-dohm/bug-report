@@ -29,27 +29,33 @@ class BugReport
   # Public: Activates the package.
   activate: ->
     @commandLogger = new CommandLogger
-    openReport = (@externalData) =>
-      @open()
 
     @commands = atom.commands.add 'atom-workspace',
-      'bug-report:open': (event, externalData) ->
-        if externalData and not externalData.body
-          externalData =
-            title: 'Error'
-            time:   Date.now()
-            body:   externalData
-
-        openReport(externalData)
+      'bug-report:open': =>
+        @open()
 
       'bug-report:insert-version-info': =>
         editor = atom.workspace.getActiveTextEditor()
         editor?.insertText(@versionSection())
 
+    atom.services.provide 'bug-report', '1.0.0',
+      openReport: (externalData) =>
+        @openReport(externalData)
+
   # Public: Deactivates the package.
   deactivate: ->
     @commands.dispose()
     @commandLogger = null
+
+  openReport: (externalData) ->
+    if externalData and not externalData.body
+      externalData =
+        title: 'Error'
+        time:   Date.now()
+        body:   externalData
+
+    @externalData = externalData
+    @open()
 
   # Public: Opens the bug report.
   open: ->
