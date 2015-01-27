@@ -1,8 +1,9 @@
 # CHANGELOG
 
-## **master** &mdash; *Unreleased*
+## **v0.5.4** &mdash; *Released: 27 January 2015*
 
 * [#39](https://github.com/lee-dohm/bug-report/issues/40) &mdash; Add command to insert the Atom version information into the current editor
+* [#44](https://github.com/lee-dohm/bug-report/issues/44) &mdash; Fix the bug report showing up empty
 
 ## **v0.5.3** &mdash; *Released: 3 December 2014*
 
