@@ -1,7 +1,7 @@
 {
   "name": "bug-report",
   "main": "./lib/bug-report",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Dumps relevant information into a nicely formatted Markdown file for easily reporting a bug to Atom or a third-party package.",
   "activationEvents": [],
   "repository": "https://github.com/lee-dohm/bug-report",
