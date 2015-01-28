@@ -20,7 +20,9 @@ describe 'PanelView', ->
     waitsForPromise ->
       atom.workspace.open().then (e) ->
         editor = e
-        panel = new PanelView(editor)
+
+    runs ->
+      panel = new PanelView(editor)
 
   describe 'initialization', ->
     it 'defaults the inputs to empty', ->
@@ -46,16 +48,19 @@ describe 'PanelView', ->
         expect(panel.tokenInput.prop('placeholder')).toBe 'Default: stored in file'
 
     it 'adds command listeners for core:focus-next and core:confirm to titleInput', ->
-      expect(helper.hasCommand(panel.titleInput.element, 'core:focus-next')).toBeTruthy()
-      expect(helper.hasCommand(panel.titleInput.element, 'core:confirm')).toBeTruthy()
+      titleInput = workspaceElement.querySelector('.title-input')
+      expect(helper.hasCommand(titleInput, 'core:focus-next')).toBeTruthy()
+      expect(helper.hasCommand(titleInput, 'core:confirm')).toBeTruthy()
 
     it 'adds command listeners for core:focus-next and core:confirm to repoInput', ->
-      expect(helper.hasCommand(panel.repoInput.element, 'core:focus-next')).toBeTruthy()
-      expect(helper.hasCommand(panel.repoInput.element, 'core:confirm')).toBeTruthy()
+      repoInput = workspaceElement.querySelector('.repo-input')
+      expect(helper.hasCommand(repoInput, 'core:focus-next')).toBeTruthy()
+      expect(helper.hasCommand(repoInput, 'core:confirm')).toBeTruthy()
 
     it 'adds command listeners for core:focus-next and core:confirm to tokenInput', ->
-      expect(helper.hasCommand(panel.tokenInput.element, 'core:focus-next')).toBeTruthy()
-      expect(helper.hasCommand(panel.tokenInput.element, 'core:confirm')).toBeTruthy()
+      tokenInput = workspaceElement.querySelector('.token-input')
+      expect(helper.hasCommand(tokenInput, 'core:focus-next')).toBeTruthy()
+      expect(helper.hasCommand(tokenInput, 'core:confirm')).toBeTruthy()
 
     it 'adds a command listener for core:cancel to the workspace view', ->
       expect(helper.hasCommand(workspaceElement, 'core:cancel')).toBeTruthy()

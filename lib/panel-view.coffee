@@ -1,5 +1,5 @@
-{View} = require 'atom'
-{CompositeDisposable} = require 'event-kit'
+{View} = require 'atom-space-pen-views'
+{CompositeDisposable} = require 'atom'
 fs = require 'fs'
 request = require 'request'
 
@@ -99,8 +99,8 @@ class PanelView extends View
 
         @destroy() if button is 0
 
-    @subscribe @postBtn, 'click', => @post()
-    @subscribe @closeBtn, 'click', =>
+    @postBtn.on 'click', => @post()
+    @closeBtn.on 'click', =>
       @destroy()
 
     @disposables.add atom.workspace.onDidChangeActivePaneItem (activeItem) =>
@@ -118,7 +118,6 @@ class PanelView extends View
     @editor = null
 
     @disposables.dispose()
-    @unsubscribe()
     @detach()
 
   # Public: Posts the bug report to GitHub.
