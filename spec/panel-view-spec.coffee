@@ -1,4 +1,3 @@
-{WorkspaceView} = require 'atom'
 fs = require 'fs'
 path = require 'path'
 temp = require 'temp'
@@ -8,14 +7,12 @@ PanelView = require '../lib/panel-view'
 helper = require './spec-helper'
 
 describe 'PanelView', ->
-  [panel, editor, tokenPath] = []
+  [panel, editor, tokenPath, workspaceElement] = []
 
   beforeEach ->
     directory = temp.mkdirSync()
     tokenPath = path.join(directory, 'faketoken.txt')
-
-    atom.workspaceView = new WorkspaceView
-    atom.workspace = atom.workspaceView.getModel()
+    workspaceElement = atom.views.getView(atom.workspace)
 
     atom.config.set('bug-report.saveToken', true)
     atom.config.set('bug-report.tokenPath', tokenPath)
@@ -49,19 +46,19 @@ describe 'PanelView', ->
         expect(panel.tokenInput.prop('placeholder')).toBe 'Default: stored in file'
 
     it 'adds command listeners for core:focus-next and core:confirm to titleInput', ->
-      expect(helper.hasCommand(panel.titleInput, 'core:focus-next')).toBeTruthy()
-      expect(helper.hasCommand(panel.titleInput, 'core:confirm')).toBeTruthy()
+      expect(helper.hasCommand(panel.titleInput.element, 'core:focus-next')).toBeTruthy()
+      expect(helper.hasCommand(panel.titleInput.element, 'core:confirm')).toBeTruthy()
 
     it 'adds command listeners for core:focus-next and core:confirm to repoInput', ->
-      expect(helper.hasCommand(panel.repoInput, 'core:focus-next')).toBeTruthy()
-      expect(helper.hasCommand(panel.repoInput, 'core:confirm')).toBeTruthy()
+      expect(helper.hasCommand(panel.repoInput.element, 'core:focus-next')).toBeTruthy()
+      expect(helper.hasCommand(panel.repoInput.element, 'core:confirm')).toBeTruthy()
 
     it 'adds command listeners for core:focus-next and core:confirm to tokenInput', ->
-      expect(helper.hasCommand(panel.tokenInput, 'core:focus-next')).toBeTruthy()
-      expect(helper.hasCommand(panel.tokenInput, 'core:confirm')).toBeTruthy()
+      expect(helper.hasCommand(panel.tokenInput.element, 'core:focus-next')).toBeTruthy()
+      expect(helper.hasCommand(panel.tokenInput.element, 'core:confirm')).toBeTruthy()
 
     it 'adds a command listener for core:cancel to the workspace view', ->
-      expect(helper.hasCommand(atom.workspaceView, 'core:cancel')).toBeTruthy()
+      expect(helper.hasCommand(workspaceElement, 'core:cancel')).toBeTruthy()
 
   describe 'destruction', ->
     it 'disposes of the commands', ->
@@ -79,7 +76,7 @@ describe 'PanelView', ->
       spyOn(panel.disposables, 'dispose')
       spyOn(editor, 'destroy')
 
-      atom.commands.dispatch(atom.workspaceView.element, 'core:cancel')
+      atom.commands.dispatch(workspaceElement, 'core:cancel')
 
       expect(panel.disposables.dispose).toHaveBeenCalled()
       expect(editor.destroy).toHaveBeenCalled()
@@ -89,7 +86,7 @@ describe 'PanelView', ->
       spyOn(panel.disposables, 'dispose')
       spyOn(editor, 'destroy')
 
-      atom.commands.dispatch(atom.workspaceView.element, 'core:cancel')
+      atom.commands.dispatch(workspaceElement, 'core:cancel')
 
       expect(panel.disposables.dispose).not.toHaveBeenCalled()
       expect(editor.destroy).not.toHaveBeenCalled()

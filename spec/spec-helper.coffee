@@ -12,7 +12,7 @@ module.exports =
   #
   # Returns a {Boolean} indicating if it has the given command.
   hasCommand: (item, commandName) ->
-    commands = atom.commands.findCommands(target: item.element)
+    commands = atom.commands.findCommands(target: item)
     found = true for command in commands when command.name is commandName
 
     found

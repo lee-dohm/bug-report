@@ -1,20 +1,16 @@
-{WorkspaceView} = require 'atom'
-
 CommandLogger = require '../lib/command-logger'
 
 helper = require './spec-helper'
 
 describe 'CommandLogger', ->
-  [logger] = []
+  [logger, workspaceElement] = []
 
   dispatch = (command) ->
-    atom.commands.dispatch(atom.workspaceView.element, command)
+    atom.commands.dispatch(workspaceElement, command)
 
   beforeEach ->
-    atom.workspaceView = new WorkspaceView
-    atom.workspace = atom.workspaceView.getModel()
-
     logger = new CommandLogger
+    workspaceElement = atom.views.getView(atom.workspace)
 
   describe 'logging of commands', ->
     it 'catches the name of the command', ->
@@ -55,6 +51,9 @@ describe 'CommandLogger', ->
       expect(logger.eventLog.length).toBe(logger.logSize)
 
   describe 'formatting of text log', ->
+    beforeEach ->
+      logger.initLog()
+
     it 'does not output empty log items', ->
       expect(logger.getText()).toBe """
         ```
@@ -62,7 +61,7 @@ describe 'CommandLogger', ->
       """
 
     it 'formats commands with the time, name and source', ->
-      atom.commands.dispatch(atom.workspaceView.element, 'foo:bar')
+      atom.commands.dispatch(workspaceElement, 'foo:bar')
 
       expect(logger.getText()).toBe """
         ```

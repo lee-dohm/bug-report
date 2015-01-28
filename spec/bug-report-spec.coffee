@@ -1,23 +1,21 @@
-{WorkspaceView} = require 'atom'
-
 BugReport = require '../lib/bug-report'
 
 helper = require './spec-helper'
 
 describe 'BugReport', ->
+  [workspaceElement] = []
   beforeEach ->
-    atom.workspaceView = new WorkspaceView
-    atom.workspace = atom.workspaceView.getModel()
+    workspaceElement = atom.views.getView(atom.workspace)
 
     waitsForPromise ->
       atom.packages.activatePackage('bug-report')
 
   describe 'activation', ->
     it 'creates the open command', ->
-      expect(helper.hasCommand(atom.workspaceView, 'bug-report:open')).toBeTruthy()
+      expect(helper.hasCommand(workspaceElement, 'bug-report:open')).toBeTruthy()
 
     it 'creates the insert version info command', ->
-      expect(helper.hasCommand(atom.workspaceView, 'bug-report:insert-version-info')).toBeTruthy()
+      expect(helper.hasCommand(workspaceElement, 'bug-report:insert-version-info')).toBeTruthy()
 
     it 'creates the command logger', ->
       expect(BugReport.commandLogger).not.toBeNull()
@@ -27,10 +25,10 @@ describe 'BugReport', ->
       atom.packages.deactivatePackage('bug-report')
 
     it 'removes the open command', ->
-      expect(helper.hasCommand(atom.workspaceView, 'bug-report:open')).toBeFalsy()
+      expect(helper.hasCommand(workspaceElement, 'bug-report:open')).toBeFalsy()
 
     it 'removes the insert version info command', ->
-      expect(helper.hasCommand(atom.workspaceView, 'bug-report:insert-version-info')).toBeFalsy()
+      expect(helper.hasCommand(workspaceElement, 'bug-report:insert-version-info')).toBeFalsy()
 
     it 'destroys the command logger', ->
       expect(BugReport.commandLogger).toBeNull()
@@ -85,6 +83,6 @@ describe 'BugReport', ->
         waitsForPromise -> atom.workspace.open('foo.txt').then (e) -> editor = e
 
       it 'inserts the version information into the editor', ->
-        atom.commands.dispatch(atom.workspaceView.element, 'bug-report:insert-version-info')
+        atom.commands.dispatch(workspaceElement, 'bug-report:insert-version-info')
 
         expect(editor.getText()).toEqual BugReport.versionSection()
