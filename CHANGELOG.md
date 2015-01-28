@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## **v0.5.5** &mdash; *Released: 28 January 2015*
+
+* Fix all deprecations
+
 ## **v0.5.4** &mdash; *Released: 27 January 2015*
 
 * [#39](https://github.com/lee-dohm/bug-report/issues/40) &mdash; Add command to insert the Atom version information into the current editor
