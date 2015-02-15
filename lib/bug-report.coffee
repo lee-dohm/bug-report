@@ -87,9 +87,8 @@ class BugReport
   #
   # Returns a {String} containing the output of `apm --version`.
   apmVersionInfo: ->
-    cmd = path.join(atom.packages.resourcePath, 'apm/node_modules/atom-package-manager/bin/apm')
-    cmd += '.cmd' if os.platform() is 'win32'
-    spawnSync(cmd, ['--version']).stdout.toString()
+    cmd = @findApm()
+    spawnSync(cmd, ['--version']).stdout?.toString()
 
   # Private: Generates the apm version text.
   #
@@ -125,6 +124,16 @@ class BugReport
       """
     else
       ''
+
+  # Private: Finds the `apm` executable.
+  #
+  # Returns a {String} containing the absolute path to the executable.
+  findApm: ->
+    for location in ['apm/bin/apm', 'apm/node_modules/atom-package-manager/bin/apm']
+      cmd = @safeScript(path.join(atom.packages.resourcePath, location))
+      return cmd if fs.existsSync(cmd)
+
+    @safeScript('apm')
 
   # Private: Gets the OS X version information.
   #
@@ -171,6 +180,13 @@ class BugReport
   packageVersionText: (info = @packageVersionInfo()) ->
     text = "`#{info.name ? 'bug-report'}`"
     text += " v#{info.version}" if info.version
+    text
+
+  # Private: Gets a safe script name for the current platform.
+  #
+  # Returns a {String} containing the correct name.
+  safeScript: (text) ->
+    text += '.cmd' if os.platform() is 'win32'
     text
 
   # Private: Strips ANSI escape codes from the given text.
