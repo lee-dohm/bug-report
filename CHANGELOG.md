@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## **v0.5.6** &mdash; *Released: 15 February 2015*
+
+* [#45](https://github.com/lee-dohm/bug-report/issues/45) &mdash; Guard against fatal exception when apm command is not found
+
 ## **v0.5.5** &mdash; *Released: 28 January 2015*
 
 * Fix all deprecations
