@@ -1,6 +1,3 @@
-{$}    = require 'atom-space-pen-views'
-moment = require 'moment'
-
 # Command names that are ignored and not included in the log. This uses an Object to provide fast
 # string matching.
 ignoredCommands =
@@ -164,6 +161,8 @@ class CommandLogger
   #
   # Returns the {String} format of the command time.
   formatTime: (time) ->
+    moment = require 'moment'
+
     moment(time).format(@dateFmt)
 
   # Private: Initializes the log structure for speed.

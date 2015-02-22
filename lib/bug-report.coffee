@@ -2,11 +2,7 @@ fs = require 'fs'
 os = require 'os'
 path = require 'path'
 
-plist = require 'plist'
-spawnSync = require('child_process').spawnSync
-
-PanelView = require './panel-view'
-CommandLogger = require './command-logger'
+spawnSync = undefined
 
 defaultTokenPath =
   if process.platform is 'win32'
@@ -28,6 +24,7 @@ class BugReport
 
   # Public: Activates the package.
   activate: ->
+    CommandLogger = require './command-logger'
     @commandLogger = new CommandLogger
     openReport = (@externalData) =>
       @open()
@@ -81,12 +78,15 @@ class BugReport
       <small>This report was created in and posted from the Atom editor using the package #{@packageVersionText()}.</small>
       """
 
+      PanelView = require './panel-view'
       new PanelView(editor)
 
   # Private: Gets the `apm --version` information.
   #
   # Returns a {String} containing the output of `apm --version`.
   apmVersionInfo: ->
+    spawnSync = require('child_process').spawnSync
+
     cmd = @findApm()
     spawnSync(cmd, ['--version']).stdout?.toString()
 
@@ -143,6 +143,8 @@ class BugReport
   #     * `ProductVersion` a {String} with the user-facing version number.
   macVersionInfo: ->
     try
+      plist = require 'plist'
+
       text = fs.readFileSync('/System/Library/CoreServices/SystemVersion.plist', 'utf8')
       plist.parse(text)
     catch e
@@ -215,6 +217,8 @@ class BugReport
   #
   # Returns a {String} containing the version text.
   winMarketingVersion: ->
+    spawnSync = require('child_process').spawnSync
+
     info = spawnSync('systeminfo').stdout.toString()
     if (res = /OS.Name.\s+(.*)$/im.exec(info)) then res[1] else 'Unknown Windows Version'
 

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## **v0.6.2** &mdash; *Released: 22 February 2015*
+
+* [#46](https://github.com/lee-dohm/bug-report/issues/46) &mdash; Significantly reduced package load time (287ms &rarr; 16ms)
+
 ## **v0.6.1** &mdash; *Released: 15 February 2015*
 
 * [#45](https://github.com/lee-dohm/bug-report/issues/45) &mdash; Guard against fatal exception when apm command is not found
