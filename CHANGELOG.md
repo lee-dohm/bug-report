@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## **v0.6.3** &mdash; *Released: 7 March 2015*
+
+* [PR #47](https://github.com/lee-dohm/bug-report/pull/47) by [@olmokramer](https://github.com/olmokramer)
+    * Replace deprecated selectors in keymap and stylesheet
+
 ## **v0.6.2** &mdash; *Released: 22 February 2015*
 
 * [#46](https://github.com/lee-dohm/bug-report/issues/46) &mdash; Significantly reduced package load time (287ms &rarr; 16ms)
