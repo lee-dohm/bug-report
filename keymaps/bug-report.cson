@@ -7,7 +7,7 @@
 
 # For more detailed documentation see
 # https://atom.io/docs/latest/advanced/keymaps
-'.workspace':
+'atom-workspace':
   'ctrl-shift-alt-b': 'bug-report:open'
 '.title-input.native-key-bindings':
   'enter': 'core:confirm'
