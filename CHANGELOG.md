@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## **v0.7.0** &mdash; *Released: 2 May 2015*
+
+* Cleanup in preparation for Deprecation Day
+
 ## **v0.6.3** &mdash; *Released: 7 March 2015*
 
 * [PR #47](https://github.com/lee-dohm/bug-report/pull/47) by [@olmokramer](https://github.com/olmokramer)

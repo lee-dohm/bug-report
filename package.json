@@ -3,10 +3,14 @@
   "main": "./lib/bug-report",
   "version": "0.6.3",
   "description": "Dumps relevant information into a nicely formatted Markdown file for easily reporting a bug to Atom or a third-party package.",
+  "keywords": [
+    "bug",
+    "reporting"
+  ],
   "repository": "https://github.com/lee-dohm/bug-report",
   "license": "MIT",
   "engines": {
-    "atom": ">=0.174.0 <2.0.0"
+    "atom": ">=0.196.0 <2.0.0"
   },
   "dependencies": {
     "atom-space-pen-views": "^2.0.3",

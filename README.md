@@ -1,18 +1,8 @@
-# Bug Report
+# Bug Report [![Build Status](https://travis-ci.org/lee-dohm/bug-report.svg?branch=master)](https://travis-ci.org/lee-dohm/bug-report) [![Dependency Status](https://david-dm.org/lee-dohm/bug-report.svg)](https://david-dm.org/lee-dohm/bug-report)
 
 Creates a nicely formatted Markdown file for reporting an Atom bug and posts the issue to a GitHub repo.
 
 ![Bug Report Workflow](https://raw.githubusercontent.com/lee-dohm/bug-report/master/images/workflow.gif)
-
-## Installation
-
-The package can be installed by using the Settings screen and searching for `bug-report`.
-
-It can also be installed from the command line with the command:
-
-```bash
-apm install bug-report
-```
 
 ## Usage
 
@@ -87,7 +77,7 @@ Instructions:
 
 Once you have posted you will not be able to post this same report again. If you wish, you may copy this report and open a new one to start over.
 
-## Configuration
+### Configuration
 
 ![Bug Report Configuration](https://raw.githubusercontent.com/lee-dohm/bug-report/master/images/configuration.png)
 
