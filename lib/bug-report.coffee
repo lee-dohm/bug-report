@@ -93,8 +93,8 @@ class BugReport
   # Private: Generates the apm version text.
   #
   # Returns a {String} containing the apm version info.
-  apmVersionText: (info = @apmVersionInfo())->
-    text = @stripAnsi(info.trim())
+  apmVersionText: (info = @apmVersionInfo()) ->
+    text = if info then @stripAnsi(info.trim()) else 'Could not determine apm version information'
     ("    * #{line}" for line in text.split("\n")).join("\n")
 
   # Private: Extracts the Atom `package.json` information.

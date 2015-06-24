@@ -44,6 +44,13 @@ describe 'BugReport', ->
       * git 2.1.2
       """
 
+    it 'returns helpful message if no apm info is found', ->
+      spyOn(BugReport, 'apmVersionInfo').andReturn(undefined)
+
+      expect(BugReport.apmVersionText()).toBe helper.indent """
+      * Could not determine apm version information
+      """
+
   describe 'atomShellVersionText', ->
     it 'returns the atom-shell version number', ->
       expect(BugReport.atomShellVersionText(atomShellVersion: '1.2.3')).toBe '1.2.3'

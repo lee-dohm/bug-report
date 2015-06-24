@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## **v0.7.1** &mdash; *Released: 23 June 2015*
+
+* [#50](https://github.com/lee-dohm/bug-report/issues/50) &mdash; Fixed an uncaught exception when the `apm` utility can't be found
+
 ## **v0.7.0** &mdash; *Released: 2 May 2015*
 
 * Cleanup in preparation for Deprecation Day
