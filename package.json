@@ -10,13 +10,13 @@
   "repository": "https://github.com/lee-dohm/bug-report",
   "license": "MIT",
   "engines": {
-    "atom": ">=0.196.0 <2.0.0"
+    "atom": ">=1.4.0 <2.0.0"
   },
   "dependencies": {
     "atom-space-pen-views": "^2.0.3",
     "moment": "^2.8.0",
     "plist": "^1.1.0",
-    "request": "~2.0.0"
+    "request": "~2.67.0"
   },
   "devDependencies": {
     "atomdoc": "^1",
