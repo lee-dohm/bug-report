@@ -1,8 +1,13 @@
-# Bug Report [![Build Status](https://travis-ci.org/lee-dohm/bug-report.svg?branch=master)](https://travis-ci.org/lee-dohm/bug-report) [![Dependency Status](https://david-dm.org/lee-dohm/bug-report.svg)](https://david-dm.org/lee-dohm/bug-report)
+# Bug Report
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 
 Creates a nicely formatted Markdown file for reporting an Atom bug and posts the issue to a GitHub repo.
 
 ![Bug Report Workflow](https://raw.githubusercontent.com/lee-dohm/bug-report/master/images/workflow.gif)
+
+## 🚨 DEPRECATED 🚨
+
+This package is no longer maintained and has been superseded by the [town-crier package](https://github.com/atom/town-crier). Please take a look there for the latest in easy bug reporting in Atom.
 
 ## Usage
 
